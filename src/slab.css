@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+.sm-Slab {
+  position: relative;
+  overflow: hidden;
+}
+
+.sm-Slab > * {
+  position: absolute;
+  z-index: 2;
+}
+
+/* The -container has inline style to set the margin-left, and margin-right to shift it back to center. */
+.sm-Slab-container {
+  user-select: none;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+}
+.sm-Slab-slot {
+  border: 20px solid red;
+}
+
+.pm-PuzzleBoard-zoomControls {
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.pm-PuzzleBoard-zoomIn,
+.pm-PuzzleBoard-zoomOut {
+  display: block;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+}
+
+.pm-PuzzleBoard-header {
+}
