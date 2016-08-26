@@ -1,20 +1,25 @@
 <div class="sm-Slab">
-  <div class="sm-MiniMap">
-    [mini map]
+  <div class="sm-ViewFinder">
+    <slot id="view-finder">
+    </slot>
+    <div class="sm-ViewFinder-box"></div>
   </div>
   <div class="sm-Slab-container"
      unselectable="on"
      onselectstart="return false;"
      onmousedown="return false;">
-    <div class="sm-Slab-slot"
-         style="background-color:gray;">
+    <div class="sm-Slab-slot">
+      <!--
          offstyle="background-color:gray;transform:translate(0px, 0px) scale(1);width:1614px;height:1074px;">
+      -->
       <slot>
+      <content>
+      </content>
       </slot>
     </div>
   </div>
-  <div class="sm-PuzzleBoard-zoomControls">
-    <button class="pm-PuzzleBoard-zoomIn" ng-click="PuzzleBoardController.zoomIn()">+</button>
-    <button class="pm-PuzzleBoard-zoomOut" ng-click="PuzzleBoardController.zoomOut()">-</button>
+  <div class="sm-Slab-zoomControls">
+    <button class="sm-Slab-zoomIn" ng-click="PuzzleBoardController.zoomIn()">+</button>
+    <button class="sm-Slab-zoomOut" ng-click="PuzzleBoardController.zoomOut()">-</button>
   </div>
 </div>

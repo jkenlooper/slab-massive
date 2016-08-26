@@ -1,6 +1,9 @@
+@import './view-finder.css';
+
 * {
   box-sizing: border-box;
 }
+
 .sm-Slab {
   position: relative;
   overflow: hidden;
@@ -9,32 +12,32 @@
 .sm-Slab > * {
   position: absolute;
   z-index: 2;
+  outline: 1px solid green;
 }
 
 /* The -container has inline style to set the margin-left, and margin-right to shift it back to center. */
 .sm-Slab-container {
   user-select: none;
-  left: 50%;
   top: 50%;
+  left: 50%;
   z-index: 1;
 }
+
 .sm-Slab-slot {
   border: 20px solid red;
 }
 
-.pm-PuzzleBoard-zoomControls {
+.sm-Slab-zoomControls {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
-.pm-PuzzleBoard-zoomIn,
-.pm-PuzzleBoard-zoomOut {
+
+.sm-Slab-zoomIn,
+.sm-Slab-zoomOut {
   display: block;
-  text-align: center;
+  margin: 10px;
   width: 30px;
   height: 30px;
-  margin: 10px;
-}
-
-.pm-PuzzleBoard-header {
+  text-align: center;
 }

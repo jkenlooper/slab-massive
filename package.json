@@ -47,6 +47,7 @@
       "webpack.config.js"
     ]
   },
+  "main": "dist/slab-massive.js",
   "author": "Jake Hickenlooper",
   "license": "MIT",
   "dependencies": {
