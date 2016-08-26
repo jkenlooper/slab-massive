@@ -9,7 +9,6 @@ const html = `
 class SlabMassive extends HTMLElement {
   // Fires when an instance of the element is created.
   createdCallback () {
-    console.log('created')
     this.createShadowRoot().innerHTML = html
     this.slab = this.shadowRoot.querySelector('.sm-Slab')
     this.container = this.shadowRoot.querySelector('.sm-Slab-container')
@@ -24,6 +23,9 @@ class SlabMassive extends HTMLElement {
     let zoomOutEl = this.shadowRoot.querySelector('.sm-Slab-zoomOut')
     let zoomOut = this.zoomOut.bind(this)
     zoomOutEl.addEventListener('click', zoomOut)
+
+    let viewFinderClick = this.viewFinderClick.bind(this)
+    this.viewFinder.addEventListener('click', viewFinderClick)
   }
 
   // Fires when an instance was inserted into the document.
@@ -32,7 +34,6 @@ class SlabMassive extends HTMLElement {
   // Fires when an attribute was added, removed, or updated.
   attributeChangedCallback (attrName, oldVal, newVal) {
     if (oldVal !== newVal) {
-      console.log('change', attrName)
       this[attrName] = newVal
     }
     switch (attrName) {
@@ -58,7 +59,7 @@ class SlabMassive extends HTMLElement {
   }
 
   render () {
-    console.log('render', this.slab)
+    this.style.display = 'block'
     this.slab.style.width = (this.width * this.scale) + 'px'
     this.slab.style.height = (this.height * this.scale) + 'px'
 
@@ -80,12 +81,18 @@ class SlabMassive extends HTMLElement {
   }
 
   renderSlotPosition () {
-    this.slot.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.zoom})`
+    this.slot.style.transform = `scale(${this.zoom}) translate(${this.offsetX}px, ${this.offsetY}px)`
 
     // Update the viewFinder box position and size
-    console.log(`translate(${Math.floor((this.offsetX / this.zoom) * this.viewFinder.scale)}px, ${Math.floor((this.offsetY / this.zoom) * this.viewFinder.scale)}px)`)
-    //this.viewFinderBox.style.transform = `translate(${Math.floor((this.offsetX / this.zoom) * this.viewFinder.scale)}px, ${Math.floor((this.offsetY / this.zoom) * this.viewFinder.scale)}px)`
-    this.viewFinderBox.style.transform = `scale(${1 / this.zoom}) translate(${Math.floor((this.offsetX / this.zoom) * this.viewFinder.scale)}px, ${Math.floor((this.offsetY / this.zoom) * this.viewFinder.scale)}px)`
+    this.viewFinderBox.style.transform = `translate(${(Math.floor(this.offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(this.offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`
+  }
+
+  viewFinderClick (ev) {
+    // position the viewFinder box to the center of the click
+    let x = ev.pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
+    let y = ev.pageY - (this.viewFinder.offsetTop + this.offsetTop)
+    this.offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
+    this.offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
   }
 
   zoomIn () {
@@ -115,14 +122,14 @@ class SlabMassive extends HTMLElement {
     return this.getAttribute('offset-x')
   }
   set offsetX (val) {
-    this.setAttribute('offset-x', val + 'px')
+    this.setAttribute('offset-x', val)
   }
 
   get offsetY () {
     return this.getAttribute('offset-y')
   }
   set offsetY (val) {
-    this.setAttribute('offset-y', val + 'px')
+    this.setAttribute('offset-y', val)
   }
 
   get width () {
