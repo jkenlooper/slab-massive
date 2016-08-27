@@ -10,6 +10,8 @@ const html = `
 class SlabMassive extends HTMLElement {
   // Fires when an instance of the element is created.
   createdCallback () {
+    this.style.display = 'block'
+
     this.createShadowRoot().innerHTML = html
     this.slab = this.shadowRoot.querySelector('.sm-Slab')
     this.container = this.shadowRoot.querySelector('.sm-Slab-container')
@@ -68,15 +70,20 @@ class SlabMassive extends HTMLElement {
       // Set the initial scale so the slab feels the width of the window.
       this.scale = (window.innerWidth / this.width)
     }
-    this.style.display = 'block'
+    this.style.width = (this.width * this.scale) + 'px'
+    this.style.height = (this.height * this.scale) + 'px'
     this.slab.style.width = (this.width * this.scale) + 'px'
     this.slab.style.height = (this.height * this.scale) + 'px'
+    this.container.style.width = (this.width * this.scale) + 'px'
+    this.container.style.height = (this.height * this.scale) + 'px'
 
-    this.container.style.width = this.width + 'px'
-    this.container.style.height = this.height + 'px'
-    this.container.style.transform = `scale(${this.scale})`
+    // this.container.style.width = this.width + 'px'
+    // this.container.style.height = this.height + 'px'
+    // this.container.style.transform = `scale(${this.scale})`
+    /*
     this.container.style.marginLeft = ((this.width / 2) * -1) + 'px'
     this.container.style.marginTop = ((this.height / 2) * -1) + 'px'
+    */
 
     this.viewFinder.scale = (150 / this.width)
     this.viewFinder.style.width = '150px'
@@ -90,7 +97,10 @@ class SlabMassive extends HTMLElement {
   }
 
   renderSlotPosition () {
-    this.slot.style.transform = `scale(${this.zoom}) translate(${this.offsetX}px, ${this.offsetY}px)`
+    // this.slot.style.transform = `scale(${this.zoom}) translate(${this.offsetX}px, ${this.offsetY}px)`
+    this.slot.style.transform = `scale(${this.zoom})`
+    this.container.scrollLeft = this.offsetX
+    this.container.scrollTop = this.offsetY
 
     // Update the viewFinder box position and size
     this.viewFinderBox.style.transform = `translate(${(Math.floor(this.offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(this.offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`

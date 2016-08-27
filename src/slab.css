@@ -15,15 +15,15 @@
   outline: 1px solid green;
 }
 
-/* The -container has inline style to set the margin-left, and margin-right to shift it back to center. */
 .sm-Slab-container {
   user-select: none;
-  top: 50%;
-  left: 50%;
+  position: relative;
   z-index: 1;
+  overflow: scroll;
 }
 
 .sm-Slab-slot {
+  transform-origin: 0 0;
   transition: transform 500ms linear;
   border: 20px solid red;
 }
