@@ -1,4 +1,5 @@
 /* global HTMLElement */
+import Hammer from 'hammerjs'
 import style from './slab.css'
 import template from './slab-massive.html'
 
@@ -15,6 +16,8 @@ class SlabMassive extends HTMLElement {
     this.slot = this.shadowRoot.querySelector('.sm-Slab-slot')
     this.viewFinder = this.shadowRoot.querySelector('.sm-ViewFinder')
     this.viewFinderBox = this.shadowRoot.querySelector('.sm-ViewFinder-box')
+    this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
+    this.viewFinder.y = (this.viewFinder.offsetTop + this.offsetTop)
 
     this.render()
     let zoomInEl = this.shadowRoot.querySelector('.sm-Slab-zoomIn')
@@ -24,8 +27,10 @@ class SlabMassive extends HTMLElement {
     let zoomOut = this.zoomOut.bind(this)
     zoomOutEl.addEventListener('click', zoomOut)
 
-    let viewFinderClick = this.viewFinderClick.bind(this)
-    this.viewFinder.addEventListener('click', viewFinderClick)
+    let mc = new Hammer.Manager(this.viewFinder, {})
+    mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_ALL }))
+    mc.add(new Hammer.Tap())
+    mc.on('tap panstart panmove panend', Hammer.bindFn(this.viewFinderClick, this))
   }
 
   // Fires when an instance was inserted into the document.
@@ -59,6 +64,10 @@ class SlabMassive extends HTMLElement {
   }
 
   render () {
+    if (this.scale === '0') {
+      // Set the initial scale so the slab feels the width of the window.
+      this.scale = (window.innerWidth / this.width)
+    }
     this.style.display = 'block'
     this.slab.style.width = (this.width * this.scale) + 'px'
     this.slab.style.height = (this.height * this.scale) + 'px'
@@ -87,12 +96,45 @@ class SlabMassive extends HTMLElement {
     this.viewFinderBox.style.transform = `translate(${(Math.floor(this.offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(this.offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`
   }
 
-  viewFinderClick (ev) {
+  moveBy (x, y) {
+    this.pageToOffset(this.viewFinder.x + x, this.viewFinder.y + y)
+  }
+  moveTo (x, y) {
+    this.viewFinder.x += x
+    this.viewFinder.y += y
+    this.pageToOffset(this.viewFinder.x, this.viewFinder.y)
+  }
+
+  pageToOffset (pageX, pageY) {
     // position the viewFinder box to the center of the click
-    let x = ev.pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
-    let y = ev.pageY - (this.viewFinder.offsetTop + this.offsetTop)
+    let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
+    let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
     this.offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
     this.offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
+  }
+
+  viewFinderClick (ev) {
+    switch (ev.type) {
+      case 'tap':
+        this.pageToOffset(ev.pointers[0].pageX, ev.pointers[0].pageY)
+        break
+      case 'panstart':
+        this.viewFinderBox.classList.add('is-dragging')
+        this.slot.classList.add('is-dragging')
+        this.viewFinderBox.x = ev.pageX
+        this.viewFinderBox.y = ev.pageY
+        break
+      case 'panmove':
+        // Drag the element
+        this.moveBy(ev.deltaX, ev.deltaY)
+        break
+      case 'panend':
+        // Save the new position
+        this.viewFinderBox.classList.remove('is-dragging')
+        this.slot.classList.remove('is-dragging')
+        this.moveTo(ev.deltaX, ev.deltaY)
+        break
+    }
   }
 
   zoomIn () {

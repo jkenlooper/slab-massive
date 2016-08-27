@@ -51,6 +51,7 @@
   "author": "Jake Hickenlooper",
   "license": "MIT",
   "dependencies": {
+    "hammerjs": "file:lib/hammer.js-2.0.8.tar.gz",
     "webcomponents.js": "file:lib/webcomponentsjs-0.7.22.tar.gz"
   }
 }

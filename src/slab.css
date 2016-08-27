@@ -24,6 +24,7 @@
 }
 
 .sm-Slab-slot {
+  transition: transform 500ms linear;
   border: 20px solid red;
 }
 
