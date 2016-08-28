@@ -11,18 +11,44 @@
     </head>
     <body>
 
+      <h1>
+        Example usage of SlabMassive
+      </h1>
+      <h2>
+        Attribute documentation
+      </h2>
+      <ul>
+        <li>
       width and height of content (not scaled)
-      scale: To make the content all fit into the screen scale it by this amount.
+        </li>
+        <li>
+      scale: To make the content all fit into the slab-massive scale it by this amount. Use '0' to auto scale it to within browser window.
+        </li>
+        <li>
       zoom: Amount to zoom. Anything over '1' will show partial content.
+        </li>
+        <li>
       offset-[x,y]: when zoom, the offset of the content from the top left corner.
+        </li>
+      </p>
 
-      <slab-massive width="1614" height="1074" scale="0.744879" zoom="1"
+      <h2>
+        Example img within the slab-massive element.
+      </h2>
+      <p>
+        <a href="https://unsplash.com/photos/zBdXb-h02JU">
+        Photo by Sweet Ice Cream Photography: unsplash.com/photos/zBdXb-h02JU
+        </a>
+        <strong>
+        (5463x3642)
+        </strong>
+      </p>
+      <slab-massive width="5463" height="3642" scale="0" zoom="1"
         offset-x="0" offset-y="0">
-        <span style="position:absolute;left:50%;top:50%;">
-        test
-        </span>
+        <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
       </slab-massive>
 
+      <h2>WIP notes</h2>
       <ul>
         <li>
       <a href="https://pascalprecht.github.io/2014/10/25/integrating-web-components-with-angularjs/">https://pascalprecht.github.io/2014/10/25/integrating-web-components-with-angularjs/</a>

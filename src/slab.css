@@ -1,20 +1,16 @@
-@import './view-finder.css';
-
-* {
-  box-sizing: border-box;
-}
-
 .sm-Slab {
   position: relative;
   overflow: hidden;
 }
 
+/* All child elements are absolute position except the
+ * -container. */
 .sm-Slab > * {
   position: absolute;
   z-index: 2;
-  outline: 1px solid green;
 }
 
+/* The scrollable element */
 .sm-Slab-container {
   user-select: none;
   position: relative;
@@ -22,10 +18,17 @@
   overflow: scroll;
 }
 
+/* Prevent the scrolling from going out of bounds */
+.sm-Slab-slotWrapper {
+  overflow: hidden;
+}
+
+/* Surrounds the actual `slot` element and is what gets scaled
+ * when doing zoom. */
 .sm-Slab-slot {
   transform-origin: 0 0;
   transition: transform 500ms linear;
-  border: 20px solid red;
+  outline: 1px solid red;
 }
 
 .sm-Slab-zoomControls {

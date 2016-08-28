@@ -1,6 +1,6 @@
 /* global HTMLElement */
 import Hammer from 'hammerjs'
-import style from './slab.css'
+import style from './slab-massive.css'
 import template from './slab-massive.html'
 
 const html = `
@@ -16,6 +16,7 @@ class SlabMassive extends HTMLElement {
     this.slab = this.shadowRoot.querySelector('.sm-Slab')
     this.container = this.shadowRoot.querySelector('.sm-Slab-container')
     this.slot = this.shadowRoot.querySelector('.sm-Slab-slot')
+    this.slotWrapper = this.shadowRoot.querySelector('.sm-Slab-slotWrapper')
     this.viewFinder = this.shadowRoot.querySelector('.sm-ViewFinder')
     this.viewFinderBox = this.shadowRoot.querySelector('.sm-ViewFinder-box')
     this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
@@ -70,7 +71,8 @@ class SlabMassive extends HTMLElement {
 
   render () {
     if (this.scale === '0') {
-      // Set the initial scale so the slab feels the width of the window.
+      console.log('window innerWidth', window.innerWidth)
+      // Set the initial scale so the slab fills the width of the window.
       this.scale = (window.innerWidth / this.width)
     }
     this.style.width = (this.width * this.scale) + 'px'
@@ -92,8 +94,10 @@ class SlabMassive extends HTMLElement {
   }
 
   renderSlotPosition () {
+    this.slotWrapper.style.width = ((this.width * this.scale) * this.zoom) + 'px'
+    this.slotWrapper.style.height = ((this.height * this.scale) * this.zoom) + 'px'
     // this.slot.style.transform = `scale(${this.zoom}) translate(${this.offsetX}px, ${this.offsetY}px)`
-    this.slot.style.transform = `scale(${this.zoom})`
+    this.slot.style.transform = `scale(${this.scale * this.zoom})`
     //this.container.scrollLeft = this.offsetX
     //this.container.scrollTop = this.offsetY
 
