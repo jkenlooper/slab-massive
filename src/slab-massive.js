@@ -71,7 +71,6 @@ class SlabMassive extends HTMLElement {
 
   render () {
     if (this.scale === '0') {
-      console.log('window innerWidth', window.innerWidth)
       // Set the initial scale so the slab fills the width of the window.
       this.scale = (window.innerWidth / this.width)
     }
@@ -96,13 +95,12 @@ class SlabMassive extends HTMLElement {
   renderSlotPosition () {
     this.slotWrapper.style.width = ((this.width * this.scale) * this.zoom) + 'px'
     this.slotWrapper.style.height = ((this.height * this.scale) * this.zoom) + 'px'
-    // this.slot.style.transform = `scale(${this.zoom}) translate(${this.offsetX}px, ${this.offsetY}px)`
     this.slot.style.transform = `scale(${this.scale * this.zoom})`
-    //this.container.scrollLeft = this.offsetX
-    //this.container.scrollTop = this.offsetY
 
     // Update the viewFinder box position and size
-    this.viewFinderBox.style.transform = `translate(${(Math.floor(this.offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(this.offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`
+    this.viewFinderBox.style.transform = `translate(${Math.floor(((this.offsetX * this.viewFinder.scale) / this.scale) / this.zoom)}px, ${Math.floor(((this.offsetY * this.viewFinder.scale) / this.scale) / this.zoom)}px) scale(${1 / this.zoom})`
+    this.viewFinderBox.style.borderWidth = this.zoom + 'px'
+    // this.viewFinderBox.style.boxShadow = `rgba(0, 0, 0, 0.5) 0 0 0 ${this.width * this.viewFinder.scale}px`
   }
 
   moveBy (x, y) {
@@ -118,10 +116,33 @@ class SlabMassive extends HTMLElement {
     // position the viewFinder box to the center of the click
     let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
     let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
-    this.container.scrollLeft = (x / this.viewFinder.scale)
-    this.container.scrollTop = (y / this.viewFinder.scale)
+    // console.log('pageToOffset', x, y, ((x / this.viewFinder.scale) * this.scale) * this.zoom, ((x / this.viewFinder.scale) * this.scale) * this.zoom)
+    // Trigger the scroll event for the container which will update the offsetX and offsetY.
+    this.container.scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
+    this.container.scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
     // this.offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
     // this.offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
+  }
+
+  handleScroll (ev) {
+    // console.log('scroll x', this.container.scrollLeft, this.offsetX)
+    // console.log('scroll y', this.container.scrollTop, this.offsetY)
+    // console.log(this.container.scrollLeft * this.viewFinder.scale, this.container.scrollTop * this.viewFinder.scale)
+    let x = (this.container.scrollLeft * this.viewFinder.scale)
+    let y = (this.container.scrollTop * this.viewFinder.scale)
+    this.offsetX = (x / this.viewFinder.scale)
+    this.offsetY = (y / this.viewFinder.scale)
+    // this.pageToOffset(this.container.scrollLeft * this.viewFinder.scale, this.container.scrollTop * this.viewFinder.scale)
+
+    /*
+    let pageX = this.container.scrollLeft * this.viewFinder.scale
+    let pageY = this.container.scrollTop * this.viewFinder.scale
+    let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
+    let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
+    let offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
+    let offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
+    this.viewFinderBox.style.transform = `translate(${(Math.floor(offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`
+    */
   }
 
   viewFinderClick (ev) {
@@ -156,25 +177,6 @@ class SlabMassive extends HTMLElement {
     this.setAttribute('zoom', Math.max(this.zoom / 2, 1.0))
   }
 
-  handleScroll (ev) {
-    console.log('scroll', this.container.scrollLeft, this.offsetX)
-    console.log(this.container.scrollLeft * this.viewFinder.scale, this.container.scrollTop * this.viewFinder.scale)
-    let x = (this.container.scrollLeft * this.viewFinder.scale)
-    let y = (this.container.scrollTop * this.viewFinder.scale)
-    this.offsetX = (x / this.viewFinder.scale)
-    this.offsetY = (y / this.viewFinder.scale)
-    // this.pageToOffset(this.container.scrollLeft * this.viewFinder.scale, this.container.scrollTop * this.viewFinder.scale)
-
-    /*
-    let pageX = this.container.scrollLeft * this.viewFinder.scale
-    let pageY = this.container.scrollTop * this.viewFinder.scale
-    let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
-    let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
-    let offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
-    let offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
-    this.viewFinderBox.style.transform = `translate(${(Math.floor(offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`
-    */
-  }
 
   // Reflect the width prop with the attr
   get scale () {
