@@ -100,61 +100,52 @@ class SlabMassive extends HTMLElement {
     // Update the viewFinder box position and size
     this.viewFinderBox.style.transform = `translate(${Math.floor(((this.offsetX * this.viewFinder.scale) / this.scale) / this.zoom)}px, ${Math.floor(((this.offsetY * this.viewFinder.scale) / this.scale) / this.zoom)}px) scale(${1 / this.zoom})`
     this.viewFinderBox.style.borderWidth = this.zoom + 'px'
-    // this.viewFinderBox.style.boxShadow = `rgba(0, 0, 0, 0.5) 0 0 0 ${this.width * this.viewFinder.scale}px`
   }
 
   moveBy (x, y) {
-    this.pageToOffset(this.viewFinder.x + x, this.viewFinder.y + y)
+    this.pageToOffset(this.viewFinder.startX + x, this.viewFinder.startY + y)
   }
   moveTo (x, y) {
-    this.viewFinder.x += x
-    this.viewFinder.y += y
-    this.pageToOffset(this.viewFinder.x, this.viewFinder.y)
+    this.pageToOffset(this.viewFinder.startX + x, this.viewFinder.startY + y)
   }
 
-  pageToOffset (pageX, pageY) {
+  pageToOffset (pageX, pageY, animate) {
+    this.viewFinder.x = pageX
+    this.viewFinder.y = pageY
     // position the viewFinder box to the center of the click
     let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
     let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
-    // console.log('pageToOffset', x, y, ((x / this.viewFinder.scale) * this.scale) * this.zoom, ((x / this.viewFinder.scale) * this.scale) * this.zoom)
     // Trigger the scroll event for the container which will update the offsetX and offsetY.
-    this.container.scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
-    this.container.scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
-    // this.offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
-    // this.offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
+    if (animate) {
+      // TODO: animate the scrolling
+      this.container.scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
+      this.container.scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
+    } else {
+      this.container.scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
+      this.container.scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
+    }
   }
 
   handleScroll (ev) {
-    // console.log('scroll x', this.container.scrollLeft, this.offsetX)
-    // console.log('scroll y', this.container.scrollTop, this.offsetY)
-    // console.log(this.container.scrollLeft * this.viewFinder.scale, this.container.scrollTop * this.viewFinder.scale)
     let x = (this.container.scrollLeft * this.viewFinder.scale)
     let y = (this.container.scrollTop * this.viewFinder.scale)
     this.offsetX = (x / this.viewFinder.scale)
     this.offsetY = (y / this.viewFinder.scale)
-    // this.pageToOffset(this.container.scrollLeft * this.viewFinder.scale, this.container.scrollTop * this.viewFinder.scale)
-
-    /*
-    let pageX = this.container.scrollLeft * this.viewFinder.scale
-    let pageY = this.container.scrollTop * this.viewFinder.scale
-    let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
-    let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
-    let offsetX = ((x - 150 / 2) / this.viewFinder.scale) * -1
-    let offsetY = ((y - (this.viewFinder.scale * this.height) / 2) / this.viewFinder.scale) * -1
-    this.viewFinderBox.style.transform = `translate(${(Math.floor(offsetX * this.viewFinder.scale) * -1)}px, ${(Math.floor(offsetY * this.viewFinder.scale) * -1)}px) scale(${1 / this.zoom})`
-    */
   }
 
   viewFinderClick (ev) {
+    // Position the click to the center of the viewFinderBox
+    const x = ev.pointers[0].pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
+    const y = ev.pointers[0].pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
     switch (ev.type) {
       case 'tap':
-        this.pageToOffset(ev.pointers[0].pageX, ev.pointers[0].pageY)
+        this.pageToOffset(x, y, true)
         break
       case 'panstart':
         this.viewFinderBox.classList.add('is-dragging')
         this.slot.classList.add('is-dragging')
-        this.viewFinderBox.x = ev.pageX
-        this.viewFinderBox.y = ev.pageY
+        this.viewFinder.x = this.viewFinder.startX = x
+        this.viewFinder.y = this.viewFinder.startY = y
         break
       case 'panmove':
         // Drag the element
@@ -176,7 +167,6 @@ class SlabMassive extends HTMLElement {
   zoomOut () {
     this.setAttribute('zoom', Math.max(this.zoom / 2, 1.0))
   }
-
 
   // Reflect the width prop with the attr
   get scale () {
