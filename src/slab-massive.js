@@ -1,5 +1,6 @@
 /* global HTMLElement */
 import Hammer from 'hammerjs'
+import ScrollAnimation from './scroll-animation.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
 
@@ -110,19 +111,23 @@ class SlabMassive extends HTMLElement {
   }
 
   pageToOffset (pageX, pageY, animate) {
+    if (this.scrollAnimation) {
+      this.scrollAnimation.stop()
+      this.scrollAnimation = null
+    }
     this.viewFinder.x = pageX
     this.viewFinder.y = pageY
     // position the viewFinder box to the center of the click
     let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
     let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
     // Trigger the scroll event for the container which will update the offsetX and offsetY.
+    let scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
+    let scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
     if (animate) {
-      // TODO: animate the scrolling
-      this.container.scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
-      this.container.scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
+      this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
     } else {
-      this.container.scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
-      this.container.scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
+      this.container.scrollLeft = scrollLeft
+      this.container.scrollTop = scrollTop
     }
   }
 

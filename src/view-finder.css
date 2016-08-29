@@ -10,7 +10,7 @@
 .sm-ViewFinder-box {
   transform: translate(0px, 0px);
   transform-origin: 0 0;
-  transition: transform 500ms linear;
+  transition: transform 300ms linear;
   cursor: crosshair;
   border: 1px solid red;
   width: 30px;
