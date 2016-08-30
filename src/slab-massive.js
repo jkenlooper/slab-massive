@@ -47,6 +47,8 @@ class SlabMassive extends HTMLElement {
   attributeChangedCallback (attrName, oldVal, newVal) {
     if (oldVal !== newVal) {
       this[attrName] = newVal
+      let event = new window.CustomEvent(attrName + '-change', {detail: newVal})
+      this.dispatchEvent(event)
     }
     switch (attrName) {
       case 'zoom':
