@@ -73,7 +73,8 @@ class SlabMassive extends HTMLElement {
   render () {
     if (this.scale === '0') {
       // Set the initial scale so the slab fills the width of the window.
-      this.scale = (window.innerWidth / this.width)
+      let parentWidth = this.parentNode.offsetWidth
+      this.scale = (parentWidth / this.width)
     }
     this.style.width = (this.width * this.scale) + 'px'
     this.style.height = (this.height * this.scale) + 'px'
