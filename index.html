@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Example usage of SlabMassive</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="dist/webcomponents.min.js"></script>
+    </head>
+    <body>
+
+      <h1>
+        Example usage of SlabMassive
+      </h1>
+      <h2>
+        Attribute documentation
+      </h2>
+      <ul>
+        <li>
+      width and height of content (not scaled)
+        </li>
+        <li>
+      scale: To make the content all fit into the slab-massive scale it by this amount. Use '0' to auto scale it to within browser window.
+        </li>
+        <li>
+      zoom: Amount to zoom. Anything over '1' will show partial content.
+        </li>
+        <li>
+      offset-[x,y]: when zoom, the offset of the content from the top left corner.
+        </li>
+      </p>
+
+      <h2>
+        Example img within the slab-massive element.
+      </h2>
+      <p>
+        <a href="https://unsplash.com/photos/zBdXb-h02JU">
+        Photo by Sweet Ice Cream Photography: unsplash.com/photos/zBdXb-h02JU
+        </a>
+        <strong>
+        (5463x3642)
+        </strong>
+      </p>
+      <slab-massive width="5463" height="3642" scale="0.1" zoom="2"
+        offset-x="0" offset-y="0">
+        <img src="photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </slab-massive>
+
+      <h3>contained</h3>
+      <div style="width:400px">
+      <slab-massive width="5463" height="3642" scale="0" zoom="2"
+        offset-x="0" offset-y="0">
+        <img src="photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </slab-massive>
+      </div>
+
+      <script src="dist/hammer.min.js"></script>
+      <script src="dist/slab-massive.js"></script>
+
+    </body>
+</html>
