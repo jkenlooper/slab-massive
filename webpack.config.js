@@ -49,7 +49,8 @@ module.exports = function makeWebpackConfig () {
   }
 
   config.externals = {
-    'webcomponents.js': 'WebComponents'
+    'webcomponents.js': 'WebComponents',
+    'hammerjs': 'Hammer'
   }
 
   config.module = {
