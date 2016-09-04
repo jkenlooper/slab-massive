@@ -6,13 +6,43 @@
         <title>Example usage of SlabMassive</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./example.css">
         <script src="../dist/webcomponents.min.js"></script>
     </head>
     <body>
 
       <h1>
-        Example usage of SlabMassive
+        SlabMassive
       </h1>
+      <p>This is a custom web component that provides a way to navigate a large
+      content area.  There are controls to zoom in and out and a viewfinder for
+      displaying the location for the zoomed in content.</p>
+      <p>For example, to show this
+        <a href="./photo-1459206131122-b9abb445103a.jpg">
+          large 5463x3642 pixel photo
+        </a>
+        by
+        <a href="https://unsplash.com/photos/zBdXb-h02JU">
+          Sweet Ice Cream Photography
+        </a>
+        within a web page you could just put it in a scrollable
+        container like this which is simply done with CSS: </p>
+      <div class="Example Example--scrollable">
+        <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </div>
+      <p>Note that the photo is too large to view the whole of it at once.
+      However, if you wrap the `img` with the `slab-massive` element you can
+      see the whole of the photo as it has been scaled to fit within it's
+      container, and there are controls to zoom in and out.</p>
+      <div class="Example Example--a">
+      <slab-massive width="5463" height="3642" scale="0" zoom="1"
+        offset-x="0" offset-y="0">
+        <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </slab-massive>
+      </div>
+
+
+
       <h2>
         Attribute documentation
       </h2>
@@ -32,24 +62,42 @@
       </p>
 
       <h2>
-        Example img within the slab-massive element.
+        Examples showing a large photo within the slab-massive element.
       </h2>
       <p>
-        <a href="https://unsplash.com/photos/zBdXb-h02JU">
-        Photo by Sweet Ice Cream Photography: unsplash.com/photos/zBdXb-h02JU
-        </a>
-        <strong>
-        (5463x3642)
-        </strong>
+        The following examples scale the photo down to fit in a variety of containers.
       </p>
-      <slab-massive width="5463" height="3642" scale="0.1" zoom="2"
+      <p>By default it will fill it's container with the scale attribute set to 0. This blue box has a width of 600px with no height set.</p>
+      <div class="Example Example--b">
+      <slab-massive width="5463" height="3642" scale="0" zoom="1"
+        offset-x="0" offset-y="0">
+        <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </slab-massive>
+      </div>
+      <p>The width and height of this yellow container are set to 600x600 pixels which doesn't match the aspect ratio of the photo.</p>
+      <div class="Example Example--c">
+      <slab-massive width="5463" height="3642" scale="0" zoom="1"
+        offset-x="0" offset-y="0">
+        <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </slab-massive>
+      </div>
+      <p>This red container is set to 400x100 pixels which doesn't match the aspect ratio of the photo.</p>
+      <div class="Example Example--d">
+      <slab-massive width="5463" height="3642" scale="0" zoom="1"
+        offset-x="0" offset-y="0">
+        <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+      </slab-massive>
+      </div>
+      <p>Setting the scale attribute to 0.1 makes the slab-massive be 546x364:</p>
+      <slab-massive width="5463" height="3642" scale="0.1" zoom="1"
         offset-x="0" offset-y="0">
         <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
       </slab-massive>
 
-      <h3>contained</h3>
-      <div style="width:400px">
-      <slab-massive width="5463" height="3642" scale="0" zoom="2"
+      <h3>Contained Examples</h3>
+      <p>This green box is 400x267</p>
+      <div class="Example Example--a">
+      <slab-massive width="5463" height="3642" scale="0" zoom="1"
         offset-x="0" offset-y="0">
         <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
       </slab-massive>

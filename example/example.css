@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+.Example {
+  outline: 2px solid black;
+  background-color: gray;
+}
+
+.Example--scrollable {
+  overflow: auto;
+  width: 400px;
+  height: 267px;
+  outline-color: purple;
+}
+.Example--a {
+  outline-color: green;
+  width: 400px;
+  height: 267px;
+  background-color: green;
+}
+.Example--b {
+  outline-color: blue;
+  width: 600px;
+  background-color: blue;
+}
+.Example--c {
+  outline-color: yellow;
+  width: 600px;
+  height: 600px;
+  background-color: yellow;
+}
+.Example--d {
+  outline-color: red;
+  width: 400px;
+  height: 100px;
+  background-color: red;
+}
