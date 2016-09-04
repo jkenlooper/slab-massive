@@ -8,6 +8,8 @@ const html = `
   <style>${style}</style>
   ${template}
   `
+const viewFinderWidth = 150
+
 class SlabMassive extends HTMLElement {
   // Fires when an instance of the element is created.
   createdCallback () {
@@ -76,17 +78,26 @@ class SlabMassive extends HTMLElement {
     if (this.scale === '0') {
       // Set the initial scale so the slab fills the width of the window.
       let parentWidth = this.parentNode.offsetWidth
-      this.scale = (parentWidth / this.width)
+      let parentHeight = this.parentNode.offsetHeight
+      if (((parentWidth / this.width) * this.height) > parentHeight) {
+        console.log('tall')
+        this.scale = (parentHeight / this.height)
+      } else {
+        console.log('wide')
+        this.scale = (parentWidth / this.width)
+      }
     }
-    this.style.width = (this.width * this.scale) + 'px'
-    this.style.height = (this.height * this.scale) + 'px'
-    this.slab.style.width = (this.width * this.scale) + 'px'
-    this.slab.style.height = (this.height * this.scale) + 'px'
-    this.container.style.width = (this.width * this.scale) + 'px'
-    this.container.style.height = (this.height * this.scale) + 'px'
+    this.style.width =
+      this.slab.style.width =
+      this.container.style.width =
+      (this.width * this.scale) + 'px'
+    this.style.height =
+      this.slab.style.height =
+      this.container.style.height =
+      (this.height * this.scale) + 'px'
 
-    this.viewFinder.scale = (150 / this.width)
-    this.viewFinder.style.width = '150px'
+    this.viewFinder.scale = (viewFinderWidth / this.width)
+    this.viewFinder.style.width = viewFinderWidth + 'px'
     this.viewFinder.style.height = Math.floor(this.viewFinder.scale * this.height) + 'px'
     this.viewFinderBox.style.height = Math.floor(this.height * this.viewFinder.scale) + 'px'
     this.viewFinderBox.style.width = Math.floor(this.width * this.viewFinder.scale) + 'px'
