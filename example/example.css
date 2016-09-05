@@ -36,3 +36,17 @@
   height: 100px;
   background-color: red;
 }
+
+
+.Example--wide {
+  outline-color: blue;
+  width: 600px;
+  height: 200px;
+  background-color: blue;
+}
+.Example--tall {
+  outline-color: blue;
+  width: 200px;
+  height: 600px;
+  background-color: blue;
+}
