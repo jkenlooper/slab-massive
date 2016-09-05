@@ -145,8 +145,13 @@ class SlabMassive extends HTMLElement {
   moveBy (x, y) {
     this.pageToOffset(this.viewFinder.startX + x, this.viewFinder.startY + y)
   }
-  moveTo (x, y) {
-    this.pageToOffset(this.viewFinder.startX + x, this.viewFinder.startY + y)
+  scrollTo (scrollLeft, scrollTop, animate) {
+    if (animate) {
+      this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
+    } else {
+      this.container.scrollLeft = scrollLeft
+      this.container.scrollTop = scrollTop
+    }
   }
 
   pageToOffset (pageX, pageY, animate) {
@@ -199,7 +204,7 @@ class SlabMassive extends HTMLElement {
         // Save the new position
         this.viewFinderBox.classList.remove('is-dragging')
         this.slot.classList.remove('is-dragging')
-        this.moveTo(ev.deltaX, ev.deltaY)
+        this.moveBy(ev.deltaX, ev.deltaY)
         break
     }
   }
