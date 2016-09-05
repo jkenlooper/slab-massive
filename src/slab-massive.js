@@ -80,7 +80,7 @@ class SlabMassive extends HTMLElement {
 
   render () {
     if (this.scale === '0') {
-      // Set the initial scale so the slab fills the width of the window.
+      // Set the initial scale so the slab best fills the width of its container.
       let parentWidth = this.parentNode.offsetWidth
       let parentHeight = this.parentNode.offsetHeight
       if (this.fill === 'contain') {
@@ -88,6 +88,16 @@ class SlabMassive extends HTMLElement {
           this.scale = (parentHeight / this.height)
         } else {
           this.scale = (parentWidth / this.width)
+        }
+      } else if (this.fill === 'auto') {
+        // best guess
+        if ((parentWidth > parentHeight) && (this.width > this.height)) {
+          this.scale = parentHeight / this.height
+        } else if ((parentWidth < parentHeight) && (this.width < this.height)) {
+          this.scale = parentWidth / this.width
+        } else {
+          // ...
+          this.scale = parentWidth / this.width
         }
       } else { // fill = cover
         this.scale = parentWidth / this.width
