@@ -54,6 +54,7 @@ class SlabMassive extends HTMLElement {
     }
     switch (attrName) {
       case 'zoom':
+        this.renderZoom()
         this.renderSlotPosition()
         break
       case 'offset-x':
@@ -71,6 +72,9 @@ class SlabMassive extends HTMLElement {
       case 'height':
         this.render()
         break
+      case 'fill':
+        this.render()
+        break
     }
   }
 
@@ -79,12 +83,14 @@ class SlabMassive extends HTMLElement {
       // Set the initial scale so the slab fills the width of the window.
       let parentWidth = this.parentNode.offsetWidth
       let parentHeight = this.parentNode.offsetHeight
-      if (((parentWidth / this.width) * this.height) > parentHeight) {
-        console.log('tall')
-        this.scale = (parentHeight / this.height)
-      } else {
-        console.log('wide')
-        this.scale = (parentWidth / this.width)
+      if (this.fill === 'contain') {
+        if (((parentWidth / this.width) * this.height) > parentHeight) {
+          this.scale = (parentHeight / this.height)
+        } else {
+          this.scale = (parentWidth / this.width)
+        }
+      } else { // fill = cover
+        this.scale = parentWidth / this.width
       }
     }
     this.style.width =
@@ -104,7 +110,16 @@ class SlabMassive extends HTMLElement {
 
     this.slot.style.width = this.width + 'px'
     this.slot.style.height = this.height + 'px'
+    this.renderZoom()
     this.renderSlotPosition()
+  }
+
+  renderZoom () {
+    if (Number(this.zoom) === 1) {
+      this.viewFinder.classList.add('is-zoom1')
+    } else {
+      this.viewFinder.classList.remove('is-zoom1')
+    }
   }
 
   renderSlotPosition () {
@@ -228,6 +243,13 @@ class SlabMassive extends HTMLElement {
   }
   set height (val) {
     this.setAttribute('height', val)
+  }
+
+  get fill () {
+    return this.getAttribute('fill')
+  }
+  set fill (val) {
+    this.setAttribute('fill', val)
   }
 }
 
