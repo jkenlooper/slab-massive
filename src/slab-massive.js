@@ -89,16 +89,6 @@ class SlabMassive extends HTMLElement {
         } else {
           this.scale = (parentWidth / this.width)
         }
-      } else if (this.fill === 'auto') {
-        // best guess
-        if ((parentWidth > parentHeight) && (this.width > this.height)) {
-          this.scale = parentHeight / this.height
-        } else if ((parentWidth < parentHeight) && (this.width < this.height)) {
-          this.scale = parentWidth / this.width
-        } else {
-          // ...
-          this.scale = parentWidth / this.width
-        }
       } else { // fill = cover
         this.scale = parentWidth / this.width
       }
