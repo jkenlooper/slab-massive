@@ -128,7 +128,7 @@ class SlabMassive extends HTMLElement {
     this.slot.style.transform = `scale(${this.scale * this.zoom})`
 
     // Update the viewFinder box position and size
-    this.viewFinderBox.style.transform = `translate(${Math.floor(((this.offsetX * this.viewFinder.scale) / this.scale) / this.zoom)}px, ${Math.floor(((this.offsetY * this.viewFinder.scale) / this.scale) / this.zoom)}px) scale(${1 / this.zoom})`
+    this.viewFinderBox.style.transform = `translate3d(${Math.floor(((this.offsetX * this.viewFinder.scale) / this.scale) / this.zoom)}px, ${Math.floor(((this.offsetY * this.viewFinder.scale) / this.scale) / this.zoom)}px, 0) scale(${1 / this.zoom})`
     this.viewFinderBox.style.borderWidth = this.zoom + 'px'
   }
 
