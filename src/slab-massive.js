@@ -9,6 +9,7 @@ const html = `
   ${template}
   `
 const viewFinderWidth = 150
+const maximumScale = 1
 
 class SlabMassive extends HTMLElement {
   // Fires when an instance of the element is created.
@@ -25,13 +26,14 @@ class SlabMassive extends HTMLElement {
     this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
     this.viewFinder.y = (this.viewFinder.offsetTop + this.offsetTop)
 
-    this.render()
-    let zoomInEl = this.shadowRoot.querySelector('.sm-Slab-zoomIn')
+    this.zoomInEl = this.shadowRoot.querySelector('.sm-Slab-zoomIn')
     let zoomIn = this.zoomIn.bind(this)
-    zoomInEl.addEventListener('click', zoomIn)
-    let zoomOutEl = this.shadowRoot.querySelector('.sm-Slab-zoomOut')
+    this.zoomInEl.addEventListener('click', zoomIn)
+    this.zoomOutEl = this.shadowRoot.querySelector('.sm-Slab-zoomOut')
     let zoomOut = this.zoomOut.bind(this)
-    zoomOutEl.addEventListener('click', zoomOut)
+    this.zoomOutEl.addEventListener('click', zoomOut)
+
+    this.render()
 
     let handleScroll = this.handleScroll.bind(this)
     this.container.addEventListener('scroll', handleScroll)
@@ -51,30 +53,30 @@ class SlabMassive extends HTMLElement {
       this[attrName] = newVal
       let event = new window.CustomEvent(attrName + '-change', {detail: newVal})
       this.dispatchEvent(event)
-    }
-    switch (attrName) {
-      case 'zoom':
-        this.renderZoom()
-        this.renderSlotPosition()
-        break
-      case 'offset-x':
-        this.renderSlotPosition()
-        break
-      case 'offset-y':
-        this.renderSlotPosition()
-        break
-      case 'scale':
-        this.render()
-        break
-      case 'width':
-        this.render()
-        break
-      case 'height':
-        this.render()
-        break
-      case 'fill':
-        this.render()
-        break
+      switch (attrName) {
+        case 'zoom':
+          this.renderZoom()
+          this.renderSlotPosition()
+          break
+        case 'offset-x':
+          this.renderSlotPosition()
+          break
+        case 'offset-y':
+          this.renderSlotPosition()
+          break
+        case 'scale':
+          this.render()
+          break
+        case 'width':
+          this.render()
+          break
+        case 'height':
+          this.render()
+          break
+        case 'fill':
+          this.render()
+          break
+      }
     }
   }
 
@@ -93,6 +95,7 @@ class SlabMassive extends HTMLElement {
         this.scale = parentWidth / this.width
       }
     }
+
     this.style.width =
       this.slab.style.width =
       this.container.style.width =
@@ -119,6 +122,19 @@ class SlabMassive extends HTMLElement {
       this.viewFinder.classList.add('is-zoom1')
     } else {
       this.viewFinder.classList.remove('is-zoom1')
+    }
+    // Disable zoom in button to prevent zooming in past the maximumScale
+    if (maximumScale / this.scale === Number(this.zoom)) {
+      this.zoomInEl.setAttribute('disabled', true)
+    } else if (this.zoomInEl.hasAttribute('disabled')) {
+      this.zoomInEl.removeAttribute('disabled')
+    }
+
+    // Prevent zooming out past 1
+    if (Number(this.zoom) <= 1) {
+      this.zoomOutEl.setAttribute('disabled', true)
+    } else if (this.zoomOutEl.hasAttribute('disabled')) {
+      this.zoomOutEl.removeAttribute('disabled')
     }
   }
 
@@ -208,7 +224,8 @@ class SlabMassive extends HTMLElement {
   zoomIn () {
     const x = (Number(this.offsetX) * 2) + ((this.offsetWidth / 4) * 2)
     const y = (Number(this.offsetY) * 2) + ((this.offsetHeight / 4) * 2)
-    this.setAttribute('zoom', this.zoom * 2)
+    const zoom = Math.min(maximumScale / this.scale, this.zoom * 2)
+    this.setAttribute('zoom', zoom)
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
   }
