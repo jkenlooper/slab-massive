@@ -136,9 +136,15 @@ class SlabMassive extends HTMLElement {
     this.pageToOffset(this.viewFinder.startX + x, this.viewFinder.startY + y)
   }
   scrollTo (scrollLeft, scrollTop, animate) {
+    if (this.scrollAnimation) {
+      this.scrollAnimation.stop()
+      this.scrollAnimation = null
+    }
     if (animate) {
+      this.slot.classList.add('is-animating')
       this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
     } else {
+      this.slot.classList.remove('is-animating')
       this.container.scrollLeft = scrollLeft
       this.container.scrollTop = scrollTop
     }
@@ -158,8 +164,10 @@ class SlabMassive extends HTMLElement {
     let scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
     let scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
     if (animate) {
+      this.slot.classList.add('is-animating')
       this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
     } else {
+      this.slot.classList.remove('is-animating')
       this.container.scrollLeft = scrollLeft
       this.container.scrollTop = scrollTop
     }
@@ -182,7 +190,6 @@ class SlabMassive extends HTMLElement {
         break
       case 'panstart':
         this.viewFinderBox.classList.add('is-dragging')
-        this.slot.classList.add('is-dragging')
         this.viewFinder.x = this.viewFinder.startX = x
         this.viewFinder.y = this.viewFinder.startY = y
         break
@@ -193,18 +200,25 @@ class SlabMassive extends HTMLElement {
       case 'panend':
         // Save the new position
         this.viewFinderBox.classList.remove('is-dragging')
-        this.slot.classList.remove('is-dragging')
         this.moveBy(ev.deltaX, ev.deltaY)
         break
     }
   }
 
   zoomIn () {
+    const x = (Number(this.offsetX) * 2) + ((this.offsetWidth / 4) * 2)
+    const y = (Number(this.offsetY) * 2) + ((this.offsetHeight / 4) * 2)
     this.setAttribute('zoom', this.zoom * 2)
+    // skip animating the scrollTo since the slab is also being zoomed
+    this.scrollTo(x, y, false)
   }
 
   zoomOut () {
+    const x = Math.max((Number(this.offsetX) / 2) - (this.offsetWidth / 4), 0)
+    const y = Math.max((Number(this.offsetY) / 2) - (this.offsetHeight / 4), 0)
     this.setAttribute('zoom', Math.max(this.zoom / 2, 1.0))
+    // skip animating the scrollTo since the slab is also being zoomed
+    this.scrollTo(x, y, false)
   }
 
   // Reflect the width prop with the attr

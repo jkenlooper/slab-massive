@@ -27,8 +27,10 @@
  * when doing zoom. */
 .sm-Slab-slot {
   transform-origin: 0 0;
-  transition: transform 500ms linear;
   outline: 1px solid red;
+}
+.sm-Slab-slot.is-animating {
+  transition: transform 500ms linear;
 }
 
 .sm-Slab-zoomControls {
