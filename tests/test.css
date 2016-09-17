@@ -1,6 +1,17 @@
 * {
   box-sizing: border-box;
 }
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th {
+  background-color: #ddd;
+}
+td {
+  border: 1px solid #555;
+  padding: 10px;
+}
 
 .Example {
   outline: 2px solid black;
@@ -37,16 +48,29 @@
   background-color: red;
 }
 
+.Example--test {
+  outline-color: blue;
+  width: 846px;
+  height: 661px;
+  background-color: blue;
+}
+
+.Example--square {
+  outline-color: blue;
+  width: 400px;
+  height: 400px;
+  background-color: blue;
+}
 
 .Example--wide {
   outline-color: blue;
-  width: 600px;
+  width: 400px;
   height: 200px;
   background-color: blue;
 }
 .Example--tall {
   outline-color: blue;
   width: 200px;
-  height: 600px;
+  height: 400px;
   background-color: blue;
 }

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>SlabMassive Visual Tests</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./test.css">
+        <script src="../dist/webcomponents.min.js"></script>
+    </head>
+    <body>
+      <section>
+        <h1>tests</h1>
+
+        <div style="margin-bottom: 50px;">
+        <div class="Example Example--test">
+              <slab-massive width="2913" height="1977"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="auto"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="2913" height="1977" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+        </div>
+        </div>
+
+        <div class="Example Example--test">
+        <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                           fill="contain"
+          offset-x="0" offset-y="0">
+          <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+        </slab-massive>
+        </div>
+        <h3>Showing a 5463x3642 photo</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Container size</th>
+              <th>fill='contain'</th>
+              <th>fill='cover'</th>
+              <th>fill='auto'</th>
+            </tr>
+          </thead>
+          <tr>
+            <th>400x400</th>
+            <td>
+              <div class="Example Example--square">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="contain"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--square">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="cover"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--square">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="auto"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>400x200</th>
+            <td>
+              <div class="Example Example--wide">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="contain"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--wide">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="cover"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--wide">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="auto"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>200x400</th>
+            <td>
+              <div class="Example Example--tall">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="contain"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--tall">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="cover"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--tall">
+              <slab-massive width="5463" height="3642"
+                                         scale="0"
+                                         zoom="1"
+                                         fill="auto"
+                offset-x="0" offset-y="0">
+                <img src="./photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
+
+              </slab-massive>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <h3>Showing a 2448x3264 photo</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Container size</th>
+              <th>fill='contain'</th>
+              <th>fill='cover'</th>
+              <th>fill='auto'</th>
+            </tr>
+          </thead>
+          <tr>
+            <th>400x400</th>
+            <td>
+              <div class="Example Example--square">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--square">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--square">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>400x200</th>
+            <td>
+              <div class="Example Example--wide">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--wide">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--wide">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>200x400</th>
+            <td>
+              <div class="Example Example--tall">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--tall">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+            <td>
+              <div class="Example Example--tall">
+                <slab-massive width="2448" height="3264" scale="0" zoom="1"
+                                                                   fill="contain"
+                  offset-x="0" offset-y="0">
+                  <img src="./photo-1417722009592-65fa261f5632.jpeg" width="2448" height="3264" alt="Photo by Paula Borowska"><!-- https://unsplash.com/photos/OM7CvKnhjfs -->
+                </slab-massive>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </section>
+
+      <script src="../dist/hammer.min.js"></script>
+      <script src="../dist/slab-massive.js"></script>
+
+    </body>
+</html>
