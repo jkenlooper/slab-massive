@@ -1,5 +1,4 @@
-/* global HTMLElement */
-import Hammer from 'hammerjs'
+/* global HTMLElement, Hammer */
 import ScrollAnimation from './scroll-animation.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
@@ -94,6 +93,10 @@ class SlabMassive extends HTMLElement {
       } else { // fill = cover
         this.scale = parentWidth / this.width
       }
+    }
+    if (this.zoom === '0') {
+      // Zoom in to the max
+      this.zoom = maximumScale / this.scale
     }
 
     this.style.width =
