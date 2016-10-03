@@ -37,10 +37,13 @@ class SlabMassive extends HTMLElement {
     let handleScroll = this.handleScroll.bind(this)
     this.container.addEventListener('scroll', handleScroll)
 
+    /*
     let mc = new Hammer.Manager(this.viewFinder, {})
     mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_ALL }))
     mc.add(new Hammer.Tap())
     mc.on('tap panstart panmove panend', Hammer.bindFn(this.viewFinderClick, this))
+    */
+    this.viewFinder.addEventListener('click', this.viewFinderClick.bind(this))
   }
 
   // Fires when an instance was inserted into the document.
