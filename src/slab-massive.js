@@ -19,7 +19,7 @@ class SlabMassive extends HTMLElement {
     this.createShadowRoot().innerHTML = html
     this.slab = this.shadowRoot.querySelector('.sm-Slab')
     this.container = this.shadowRoot.querySelector('.sm-Slab-container')
-    this.slot = this.shadowRoot.querySelector('.sm-Slab-slot')
+    this._slot = this.shadowRoot.querySelector('.sm-Slab-slot')
     this.slotWrapper = this.shadowRoot.querySelector('.sm-Slab-slotWrapper')
     this.viewFinder = this.shadowRoot.querySelector('.sm-ViewFinder')
     this.viewFinderBox = this.shadowRoot.querySelector('.sm-ViewFinder-box')
@@ -111,8 +111,8 @@ class SlabMassive extends HTMLElement {
     this.viewFinderBox.style.height = Math.floor(this.height * this.viewFinder.scale) + 'px'
     this.viewFinderBox.style.width = Math.floor(this.width * this.viewFinder.scale) + 'px'
 
-    this.slot.style.width = this.width + 'px'
-    this.slot.style.height = this.height + 'px'
+    this._slot.style.width = this.width + 'px'
+    this._slot.style.height = this.height + 'px'
     this.renderZoom()
     this.renderSlotPosition()
   }
@@ -141,7 +141,7 @@ class SlabMassive extends HTMLElement {
   renderSlotPosition () {
     this.slotWrapper.style.width = ((this.width * this.scale) * this.zoom) + 'px'
     this.slotWrapper.style.height = ((this.height * this.scale) * this.zoom) + 'px'
-    this.slot.style.transform = `scale(${this.scale * this.zoom})`
+    this._slot.style.transform = `scale(${this.scale * this.zoom})`
 
     // Update the viewFinder box position and size
     this.viewFinderBox.style.transform = `translate3d(${Math.floor(((this.offsetX * this.viewFinder.scale) / this.scale) / this.zoom)}px, ${Math.floor(((this.offsetY * this.viewFinder.scale) / this.scale) / this.zoom)}px, 0) scale(${1 / this.zoom})`
@@ -157,10 +157,10 @@ class SlabMassive extends HTMLElement {
       this.scrollAnimation = null
     }
     if (animate) {
-      this.slot.classList.add('is-animating')
+      this._slot.classList.add('is-animating')
       this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
     } else {
-      this.slot.classList.remove('is-animating')
+      this._slot.classList.remove('is-animating')
       this.container.scrollLeft = scrollLeft
       this.container.scrollTop = scrollTop
     }
@@ -180,10 +180,10 @@ class SlabMassive extends HTMLElement {
     let scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
     let scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
     if (animate) {
-      this.slot.classList.add('is-animating')
+      this._slot.classList.add('is-animating')
       this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
     } else {
-      this.slot.classList.remove('is-animating')
+      this._slot.classList.remove('is-animating')
       this.container.scrollLeft = scrollLeft
       this.container.scrollTop = scrollTop
     }
