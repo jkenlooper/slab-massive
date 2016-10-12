@@ -1,4 +1,4 @@
-/* global HTMLElement, Hammer */
+/* global HTMLElement */
 import ScrollAnimation from './scroll-animation.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
@@ -43,6 +43,7 @@ class SlabMassive extends HTMLElement {
     mc.add(new Hammer.Tap())
     mc.on('tap panstart panmove panend', Hammer.bindFn(this.viewFinderClick, this))
     */
+    this.viewFinder.addEventListener('click', this.viewFinderClick.bind(this))
     this.viewFinder.addEventListener('click', this.viewFinderClick.bind(this))
   }
 
@@ -204,8 +205,8 @@ class SlabMassive extends HTMLElement {
 
   viewFinderClick (ev) {
     // Position the click to the center of the viewFinderBox
-    const x = ev.pointers[0].pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
-    const y = ev.pointers[0].pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
+    const x = ev.pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
+    const y = ev.pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
     switch (ev.type) {
       case 'tap':
         this.pageToOffset(x, y, true)
