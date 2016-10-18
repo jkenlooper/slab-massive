@@ -1,7 +1,7 @@
+/* global customElements */
 // Depends on webcomponents.js polyfill to be in head
-require('file?name=[name].[ext]!../node_modules/webcomponents.js/webcomponents.min.js')
+//require('file?name=[name].[ext]!../node_modules/document-register-element/build/document-register-element.js')
 require('file?name=[name].[ext]!../node_modules/hammerjs/hammer.min.js')
 
-import SlabMassive from './slab-massive.js'
+import './slab-massive.js'
 
-document.registerElement('slab-massive', SlabMassive)

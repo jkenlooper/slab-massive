@@ -55,11 +55,13 @@ module.exports = function makeWebpackConfig () {
 
   config.module = {
     loaders: [
+    /*
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel'
       },
+      */
       {
         test: /fonts\/.*\.(eot|svg|ttf|woff)$/,
         loader: 'file-loader?name=[name].[ext]',
