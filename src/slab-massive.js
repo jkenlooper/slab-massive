@@ -1,7 +1,150 @@
 /* global HTMLElement, Hammer */
-import ScrollAnimation from './scroll-animation.js'
-import style from './slab-massive.css'
-import template from './slab-massive.html'
+const duration = 300
+
+class ScrollAnimation {
+  constructor (element, x, y) {
+    this.start = null
+    this.element = element
+    this.startX = element.scrollLeft
+    this.startY = element.scrollTop
+    this.distX = x - this.startX
+    this.distY = y - this.startY
+    this.animateID = window.requestAnimationFrame(this.step.bind(this))
+  }
+
+  step (timestamp) {
+    if (!this.start) {
+      this.start = timestamp
+    }
+    let progress = timestamp - this.start
+
+    let scrollLeft = Math.round(this.startX + (Math.min((progress / duration), 1) * this.distX))
+    let scrollTop = Math.round(this.startY + (Math.min((progress / duration), 1) * this.distY))
+    this.element.scrollLeft = scrollLeft
+    this.element.scrollTop = scrollTop
+    if (progress < duration) {
+      this.animateID = window.requestAnimationFrame(this.step.bind(this))
+    }
+  }
+
+  stop () {
+    window.cancelAnimationFrame(this.animateID)
+  }
+}
+
+const style = `
+:host {
+  display: block;
+  contain: content;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.sm-Slab {
+  position: relative;
+  overflow: hidden;
+}
+
+/* All child elements are absolute position except the
+ * -container. */
+.sm-Slab > * {
+  position: absolute;
+  z-index: 2;
+}
+
+/* The scrollable element */
+.sm-Slab-container {
+  user-select: none;
+  position: relative;
+  z-index: 1;
+  overflow: scroll;
+}
+
+/* Prevent the scrolling from going out of bounds */
+.sm-Slab-slotWrapper {
+  overflow: hidden;
+}
+
+/* Surrounds the actual 'slot' element and is what gets scaled
+ * when doing zoom. */
+.sm-Slab-slot {
+  transform-origin: 0 0;
+  outline: 1px solid red;
+}
+.sm-Slab-slot.is-animating {
+  transition: transform 500ms linear;
+}
+
+.sm-Slab-zoomControls {
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.sm-Slab-zoomIn,
+.sm-Slab-zoomOut {
+  display: block;
+  margin: 10px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.sm-ViewFinder {
+  top: 5%;
+  left: 5%;
+  cursor: crosshair;
+  outline: 1px solid black;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.sm-ViewFinder.is-zoom1 {
+  display: none;
+}
+
+.sm-ViewFinder-box {
+  transform: translate3d(0px, 0px, 0);
+  transform-origin: 0 0;
+  transition: transform 300ms linear;
+  cursor: crosshair;
+  border: 1px solid red;
+  width: 30px;
+  height: 30px;
+}
+
+.sm-ViewFinder-box.is-dragging {
+  transition: transform 0ms linear;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+`
+const template = `
+<div class="sm-Slab">
+  <div class="sm-ViewFinder">
+    <!--
+    <slot id="view-finder" name="view-finder">
+    </slot>
+    -->
+    <div class="sm-ViewFinder-box"></div>
+  </div>
+  <div class="sm-Slab-container"
+     unselectable="on"
+     onselectstart="return false;"
+     onmousedown="return false;">
+    <div class="sm-Slab-slotWrapper">
+    <div class="sm-Slab-slot">
+      <slot>
+      </slot>
+    </div>
+    </div>
+  </div>
+  <div class="sm-Slab-zoomControls">
+    <button class="sm-Slab-zoomIn" ng-click="PuzzleBoardController.zoomIn()">+</button>
+    <button class="sm-Slab-zoomOut" ng-click="PuzzleBoardController.zoomOut()">-</button>
+  </div>
+</div>
+`
 
 const html = `
   <style>${style}</style>
@@ -37,17 +180,34 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     let handleScroll = this.handleScroll.bind(this)
     this.container.addEventListener('scroll', handleScroll)
 
+    this.viewFinder.addEventListener('mousedown', this.handleViewFinderMousedown.bind(this))
+
+    /*
     let mc = new Hammer.Manager(this.viewFinder, {})
     mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_ALL }))
     mc.add(new Hammer.Tap())
     mc.on('tap panstart panmove panend', Hammer.bindFn(this.viewFinderClick, this))
+    */
   }
 
   // Fires when an instance was inserted into the document.
   connectedCallback () {}
 
+  static get observedAttributes () {
+    return [
+      'zoom',
+      'offset-x',
+      'offset-y',
+      'scale',
+      'width',
+      'height',
+      'fill'
+    ]
+  }
+
   // Fires when an attribute was added, removed, or updated.
   attributeChangedCallback (attrName, oldVal, newVal) {
+    //console.log('attributeChangedCallback', attrName, oldVal, newVal)
     if (oldVal !== newVal) {
       this[attrName] = newVal
       let event = new window.CustomEvent(attrName + '-change', {detail: newVal})
@@ -199,10 +359,19 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.offsetY = (y / this.viewFinder.scale)
   }
 
+  handleViewFinderMousedown (ev) {
+    console.log('mousedown -> tap', ev.pageX, ev.pageY)
+    this.viewFinderClick({
+      type: 'tap',
+      pageX: ev.pageX,
+      pageY: ev.pageY
+    })
+  }
+
   viewFinderClick (ev) {
     // Position the click to the center of the viewFinderBox
-    const x = ev.pointers[0].pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
-    const y = ev.pointers[0].pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
+    const x = ev.pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
+    const y = ev.pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
     switch (ev.type) {
       case 'tap':
         this.pageToOffset(x, y, true)
@@ -241,21 +410,7 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.scrollTo(x, y, false)
   }
 
-  // Reflect the width prop with the attr
-  get scale () {
-    return this.getAttribute('scale')
-  }
-  set scale (val) {
-    this.setAttribute('scale', val)
-  }
-
-  get zoom () {
-    return this.getAttribute('zoom')
-  }
-  set zoom (val) {
-    this.setAttribute('zoom', val)
-  }
-
+  // Reflect the prop with the attr
   get offsetX () {
     return this.getAttribute('offset-x')
   }
@@ -274,22 +429,20 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     return this.getAttribute('width')
   }
   set width (val) {
-    this.setAttribute('width', val)
+    if (val !== this.width) { this.setAttribute('width', val) }
   }
 
   get height () {
     return this.getAttribute('height')
   }
   set height (val) {
-    this.setAttribute('height', val)
+    if (val !== this.height) { this.setAttribute('height', val) }
   }
 
   get fill () {
     return this.getAttribute('fill')
   }
   set fill (val) {
-    this.setAttribute('fill', val)
+    if (val !== this.fill) { this.setAttribute('fill', val) }
   }
 })
-
-// export default SlabMassive
