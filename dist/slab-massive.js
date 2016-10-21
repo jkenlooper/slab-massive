@@ -1,1 +1,443 @@
-!function(t){function e(s){if(i[s])return i[s].exports;var o=i[s]={exports:{},id:s,loaded:!1};return t[s].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var i={};return e.m=t,e.c=i,e.p="",e(0)}([function(t,e,i){"use strict";function s(t){return t&&t.__esModule?t:{"default":t}}var o=i(2),n=s(o);i(7),i(6),document.registerElement("slab-massive",n["default"])},function(t,e){"use strict";function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var s=function(){function t(t,e){for(var i=0;i<e.length;i++){var s=e[i];s.enumerable=s.enumerable||!1,s.configurable=!0,"value"in s&&(s.writable=!0),Object.defineProperty(t,s.key,s)}}return function(e,i,s){return i&&t(e.prototype,i),s&&t(e,s),e}}(),o=300,n=function(){function t(e,s,o){i(this,t),this.start=null,this.element=e,this.startX=e.scrollLeft,this.startY=e.scrollTop,this.distX=s-this.startX,this.distY=o-this.startY,this.animateID=window.requestAnimationFrame(this.step.bind(this))}return s(t,[{key:"step",value:function(t){this.start||(this.start=t);var e=t-this.start,i=Math.round(this.startX+Math.min(e/o,1)*this.distX),s=Math.round(this.startY+Math.min(e/o,1)*this.distY);this.element.scrollLeft=i,this.element.scrollTop=s,e<o&&(this.animateID=window.requestAnimationFrame(this.step.bind(this)))}},{key:"stop",value:function(){window.cancelAnimationFrame(this.animateID)}}]),t}();e["default"]=n},function(t,e,i){"use strict";function s(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function n(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function r(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}Object.defineProperty(e,"__esModule",{value:!0});var a=function(){function t(t,e){for(var i=0;i<e.length;i++){var s=e[i];s.enumerable=s.enumerable||!1,s.configurable=!0,"value"in s&&(s.writable=!0),Object.defineProperty(t,s.key,s)}}return function(e,i,s){return i&&t(e.prototype,i),s&&t(e,s),e}}(),l=i(9),h=s(l),c=i(1),d=s(c),f=i(5),u=s(f),m=i(8),b=s(m),p="\n  <style>"+u["default"]+"</style>\n  "+b["default"]+"\n  ",w=150,v=1,g=function(t){function e(){return o(this,e),n(this,(e.__proto__||Object.getPrototypeOf(e)).apply(this,arguments))}return r(e,t),a(e,[{key:"createdCallback",value:function(){this.style.display="block",this.createShadowRoot().innerHTML=p,this.slab=this.shadowRoot.querySelector(".sm-Slab"),this.container=this.shadowRoot.querySelector(".sm-Slab-container"),this._slot=this.shadowRoot.querySelector(".sm-Slab-slot"),this.slotWrapper=this.shadowRoot.querySelector(".sm-Slab-slotWrapper"),this.viewFinder=this.shadowRoot.querySelector(".sm-ViewFinder"),this.viewFinderBox=this.shadowRoot.querySelector(".sm-ViewFinder-box"),this.viewFinder.x=this.viewFinder.offsetLeft+this.offsetLeft,this.viewFinder.y=this.viewFinder.offsetTop+this.offsetTop,this.zoomInEl=this.shadowRoot.querySelector(".sm-Slab-zoomIn");var t=this.zoomIn.bind(this);this.zoomInEl.addEventListener("click",t),this.zoomOutEl=this.shadowRoot.querySelector(".sm-Slab-zoomOut");var e=this.zoomOut.bind(this);this.zoomOutEl.addEventListener("click",e),this.render();var i=this.handleScroll.bind(this);this.container.addEventListener("scroll",i);var s=new h["default"].Manager(this.viewFinder,{});s.add(new h["default"].Pan({direction:h["default"].DIRECTION_ALL})),s.add(new h["default"].Tap),s.on("tap panstart panmove panend",h["default"].bindFn(this.viewFinderClick,this))}},{key:"attachedCallback",value:function(){}},{key:"attributeChangedCallback",value:function(t,e,i){if(e!==i){this[t]=i;var s=new window.CustomEvent(t+"-change",{detail:i});switch(this.dispatchEvent(s),t){case"zoom":this.renderZoom(),this.renderSlotPosition();break;case"offset-x":this.renderSlotPosition();break;case"offset-y":this.renderSlotPosition();break;case"scale":this.render();break;case"width":this.render();break;case"height":this.render();break;case"fill":this.render()}}}},{key:"render",value:function(){if("0"===this.scale){var t=this.parentNode.offsetWidth,e=this.parentNode.offsetHeight;"contain"===this.fill&&t/this.width*this.height>e?this.scale=e/this.height:this.scale=t/this.width}this.style.width=this.slab.style.width=this.container.style.width=this.width*this.scale+"px",this.style.height=this.slab.style.height=this.container.style.height=this.height*this.scale+"px",this.viewFinder.scale=w/this.width,this.viewFinder.style.width=w+"px",this.viewFinder.style.height=Math.floor(this.viewFinder.scale*this.height)+"px",this.viewFinderBox.style.height=Math.floor(this.height*this.viewFinder.scale)+"px",this.viewFinderBox.style.width=Math.floor(this.width*this.viewFinder.scale)+"px",this._slot.style.width=this.width+"px",this._slot.style.height=this.height+"px",this.renderZoom(),this.renderSlotPosition()}},{key:"renderZoom",value:function(){1===Number(this.zoom)?this.viewFinder.classList.add("is-zoom1"):this.viewFinder.classList.remove("is-zoom1"),v/this.scale===Number(this.zoom)?this.zoomInEl.setAttribute("disabled",!0):this.zoomInEl.hasAttribute("disabled")&&this.zoomInEl.removeAttribute("disabled"),Number(this.zoom)<=1?this.zoomOutEl.setAttribute("disabled",!0):this.zoomOutEl.hasAttribute("disabled")&&this.zoomOutEl.removeAttribute("disabled")}},{key:"renderSlotPosition",value:function(){this.slotWrapper.style.width=this.width*this.scale*this.zoom+"px",this.slotWrapper.style.height=this.height*this.scale*this.zoom+"px",this._slot.style.transform="scale("+this.scale*this.zoom+")",this.viewFinderBox.style.transform="translate3d("+Math.floor(this.offsetX*this.viewFinder.scale/this.scale/this.zoom)+"px, "+Math.floor(this.offsetY*this.viewFinder.scale/this.scale/this.zoom)+"px, 0) scale("+1/this.zoom+")",this.viewFinderBox.style.borderWidth=this.zoom+"px"}},{key:"moveBy",value:function(t,e){this.pageToOffset(this.viewFinder.startX+t,this.viewFinder.startY+e)}},{key:"scrollTo",value:function(t,e,i){this.scrollAnimation&&(this.scrollAnimation.stop(),this.scrollAnimation=null),i?(this._slot.classList.add("is-animating"),this.scrollAnimation=new d["default"](this.container,t,e)):(this._slot.classList.remove("is-animating"),this.container.scrollLeft=t,this.container.scrollTop=e)}},{key:"pageToOffset",value:function(t,e,i){this.scrollAnimation&&(this.scrollAnimation.stop(),this.scrollAnimation=null),this.viewFinder.x=t,this.viewFinder.y=e;var s=t-(this.viewFinder.offsetLeft+this.offsetLeft),o=e-(this.viewFinder.offsetTop+this.offsetTop),n=s/this.viewFinder.scale*this.scale*this.zoom,r=o/this.viewFinder.scale*this.scale*this.zoom;i?(this._slot.classList.add("is-animating"),this.scrollAnimation=new d["default"](this.container,n,r)):(this._slot.classList.remove("is-animating"),this.container.scrollLeft=n,this.container.scrollTop=r)}},{key:"handleScroll",value:function(t){var e=this.container.scrollLeft*this.viewFinder.scale,i=this.container.scrollTop*this.viewFinder.scale;this.offsetX=e/this.viewFinder.scale,this.offsetY=i/this.viewFinder.scale}},{key:"viewFinderClick",value:function(t){var e=t.pointers[0].pageX-this.viewFinderBox.offsetWidth/this.zoom/2,i=t.pointers[0].pageY-this.viewFinderBox.offsetHeight/this.zoom/2;switch(t.type){case"tap":this.pageToOffset(e,i,!0);break;case"panstart":this.viewFinderBox.classList.add("is-dragging"),this.viewFinder.x=this.viewFinder.startX=e,this.viewFinder.y=this.viewFinder.startY=i;break;case"panmove":this.moveBy(t.deltaX,t.deltaY);break;case"panend":this.viewFinderBox.classList.remove("is-dragging"),this.moveBy(t.deltaX,t.deltaY)}}},{key:"zoomIn",value:function(){var t=2*Number(this.offsetX)+this.offsetWidth/4*2,e=2*Number(this.offsetY)+this.offsetHeight/4*2,i=Math.min(v/this.scale,2*this.zoom);this.setAttribute("zoom",i),this.scrollTo(t,e,!1)}},{key:"zoomOut",value:function(){var t=Math.max(Number(this.offsetX)/2-this.offsetWidth/4,0),e=Math.max(Number(this.offsetY)/2-this.offsetHeight/4,0);this.setAttribute("zoom",Math.max(this.zoom/2,1)),this.scrollTo(t,e,!1)}},{key:"scale",get:function(){return this.getAttribute("scale")},set:function(t){this.setAttribute("scale",t)}},{key:"zoom",get:function(){return this.getAttribute("zoom")},set:function(t){this.setAttribute("zoom",t)}},{key:"offsetX",get:function(){return this.getAttribute("offset-x")},set:function(t){this.setAttribute("offset-x",t)}},{key:"offsetY",get:function(){return this.getAttribute("offset-y")},set:function(t){this.setAttribute("offset-y",t)}},{key:"width",get:function(){return this.getAttribute("width")},set:function(t){this.setAttribute("width",t)}},{key:"height",get:function(){return this.getAttribute("height")},set:function(t){this.setAttribute("height",t)}},{key:"fill",get:function(){return this.getAttribute("fill")},set:function(t){this.setAttribute("fill",t)}}]),e}(HTMLElement);e["default"]=g},function(t,e,i){e=t.exports=i(4)(),e.push([t.id,"*{box-sizing:border-box}.sm-Slab{position:relative;overflow:hidden}.sm-Slab>*{position:absolute;z-index:2}.sm-Slab-container{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:relative;z-index:1;overflow:scroll}.sm-Slab-slotWrapper{overflow:hidden}.sm-Slab-slot{-webkit-transform-origin:0 0;transform-origin:0 0;outline:1px solid red}.sm-Slab-slot.is-animating{-webkit-transition:-webkit-transform .5s linear;transition:-webkit-transform .5s linear;transition:transform .5s linear;transition:transform .5s linear,-webkit-transform .5s linear}.sm-Slab-zoomControls{right:0;bottom:0;background-color:rgba(0,0,0,.4)}.sm-Slab-zoomIn,.sm-Slab-zoomOut{display:block;margin:10px;width:30px;height:30px;text-align:center}.sm-ViewFinder{top:5%;left:5%;cursor:crosshair;outline:1px solid #000;background-color:hsla(0,0%,100%,.4)}.sm-ViewFinder.is-zoom1{display:none}.sm-ViewFinder-box{-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-transform-origin:0 0;transform-origin:0 0;-webkit-transition:-webkit-transform .3s linear;transition:-webkit-transform .3s linear;transition:transform .3s linear;transition:transform .3s linear,-webkit-transform .3s linear;cursor:crosshair;border:1px solid red;width:30px;height:30px}.sm-ViewFinder-box.is-dragging{-webkit-transition:-webkit-transform 0ms linear;transition:-webkit-transform 0ms linear;transition:transform 0ms linear;transition:transform 0ms linear,-webkit-transform 0ms linear;background-color:rgba(0,0,0,.2)}",""])},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var i=this[e];i[2]?t.push("@media "+i[2]+"{"+i[1]+"}"):t.push(i[1])}return t.join("")},t.i=function(e,i){"string"==typeof e&&(e=[[null,e,""]]);for(var s={},o=0;o<this.length;o++){var n=this[o][0];"number"==typeof n&&(s[n]=!0)}for(o=0;o<e.length;o++){var r=e[o];"number"==typeof r[0]&&s[r[0]]||(i&&!r[2]?r[2]=i:i&&(r[2]="("+r[2]+") and ("+i+")"),t.push(r))}},t}},function(t,e,i){var s=i(3);"string"==typeof s?t.exports=s:t.exports=s.toString()},function(t,e,i){t.exports=i.p+"hammer.min.js"},function(t,e,i){t.exports=i.p+"webcomponents.min.js"},function(t,e){t.exports='<div class="sm-Slab">\n  <div class="sm-ViewFinder">\n    <slot id="view-finder">\n    </slot>\n    <div class="sm-ViewFinder-box"></div>\n  </div>\n  <div class="sm-Slab-container"\n     unselectable="on"\n     onselectstart="return false;"\n     onmousedown="return false;">\n    <div class="sm-Slab-slotWrapper">\n    <div class="sm-Slab-slot">\n      <slot>\n      <content>\n      </content>\n      </slot>\n    </div>\n    </div>\n  </div>\n  <div class="sm-Slab-zoomControls">\n    <button class="sm-Slab-zoomIn" ng-click="PuzzleBoardController.zoomIn()">+</button>\n    <button class="sm-Slab-zoomOut" ng-click="PuzzleBoardController.zoomOut()">-</button>\n  </div>\n</div>\n'},function(t,e){t.exports=Hammer}]);
+const duration = 300
+
+class ScrollAnimation {
+  constructor (element, x, y) {
+    this.start = null
+    this.element = element
+    this.startX = element.scrollLeft
+    this.startY = element.scrollTop
+    this.distX = x - this.startX
+    this.distY = y - this.startY
+    this.animateID = window.requestAnimationFrame(this.step.bind(this))
+  }
+
+  step (timestamp) {
+    if (!this.start) {
+      this.start = timestamp
+    }
+    let progress = timestamp - this.start
+
+    let scrollLeft = Math.round(this.startX + (Math.min((progress / duration), 1) * this.distX))
+    let scrollTop = Math.round(this.startY + (Math.min((progress / duration), 1) * this.distY))
+    this.element.scrollLeft = scrollLeft
+    this.element.scrollTop = scrollTop
+    if (progress < duration) {
+      this.animateID = window.requestAnimationFrame(this.step.bind(this))
+    }
+  }
+
+  stop () {
+    window.cancelAnimationFrame(this.animateID)
+  }
+}
+
+// export default ScrollAnimation
+const style = `
+:host {
+  display: block;
+  contain: content;
+}
+
+* {
+  box-sizing: border-box;
+}
+.sm-Slab {
+  position: relative;
+  overflow: hidden;
+}
+
+/* All child elements are absolute position except the
+ * -container. */
+.sm-Slab > * {
+  position: absolute;
+  z-index: 2;
+}
+
+/* The scrollable element */
+.sm-Slab-container {
+  user-select: none;
+  position: relative;
+  z-index: 1;
+  overflow: scroll;
+}
+
+/* Prevent the scrolling from going out of bounds */
+.sm-Slab-slotWrapper {
+  overflow: hidden;
+}
+
+/* Surrounds the actual 'slot' element and is what gets scaled
+ * when doing zoom. */
+.sm-Slab-slot {
+  transform-origin: 0 0;
+  outline: 1px solid red;
+}
+.sm-Slab-slot.is-animating {
+  transition: transform 500ms linear;
+}
+
+.sm-Slab-zoomControls {
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.sm-Slab-zoomIn,
+.sm-Slab-zoomOut {
+  display: block;
+  margin: 10px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+.sm-ViewFinder {
+  top: 5%;
+  left: 5%;
+  cursor: crosshair;
+  outline: 1px solid black;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.sm-ViewFinder.is-zoom1 {
+  display: none;
+}
+
+.sm-ViewFinder-box {
+  transform: translate3d(0px, 0px, 0);
+  transform-origin: 0 0;
+  transition: transform 300ms linear;
+  cursor: crosshair;
+  border: 1px solid red;
+  width: 30px;
+  height: 30px;
+}
+
+.sm-ViewFinder-box.is-dragging {
+  transition: transform 0ms linear;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+`
+const template = `
+<div class="sm-Slab">
+  <div class="sm-ViewFinder">
+    <slot id="view-finder" name="view-finder">
+    </slot>
+    <div class="sm-ViewFinder-box"></div>
+  </div>
+  <div class="sm-Slab-container"
+     unselectable="on"
+     onselectstart="return false;"
+     onmousedown="return false;">
+    <div class="sm-Slab-slotWrapper">
+    <div class="sm-Slab-slot">
+      <slot>
+      </slot>
+    </div>
+    </div>
+  </div>
+  <div class="sm-Slab-zoomControls">
+    <button class="sm-Slab-zoomIn" ng-click="PuzzleBoardController.zoomIn()">+</button>
+    <button class="sm-Slab-zoomOut" ng-click="PuzzleBoardController.zoomOut()">-</button>
+  </div>
+</div>
+`
+/* global HTMLElement, ScrollAnimation, style, template */
+/* Manually importing these
+import ScrollAnimation from './scroll-animation.js'
+import style from './slab-massive.css'
+import template from './slab-massive.html'
+*/
+
+const html = `
+  <style>${style}</style>
+  ${template}
+  `
+const viewFinderWidth = 150
+const maximumScale = 1
+
+window.customElements.define('slab-massive', class extends HTMLElement {
+  constructor () {
+    super()
+    const shadowRoot = this.attachShadow({mode: 'open'})
+    shadowRoot.innerHTML = html
+
+    this.slab = shadowRoot.querySelector('.sm-Slab')
+    this.container = shadowRoot.querySelector('.sm-Slab-container')
+    this._slot = shadowRoot.querySelector('.sm-Slab-slot')
+    this.slotWrapper = shadowRoot.querySelector('.sm-Slab-slotWrapper')
+    this.viewFinder = shadowRoot.querySelector('.sm-ViewFinder')
+    this.viewFinderBox = shadowRoot.querySelector('.sm-ViewFinder-box')
+    this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
+    this.viewFinder.y = (this.viewFinder.offsetTop + this.offsetTop)
+
+    this.zoomInEl = shadowRoot.querySelector('.sm-Slab-zoomIn')
+    let zoomIn = this.zoomIn.bind(this)
+    this.zoomInEl.addEventListener('click', zoomIn)
+    this.zoomOutEl = shadowRoot.querySelector('.sm-Slab-zoomOut')
+    let zoomOut = this.zoomOut.bind(this)
+    this.zoomOutEl.addEventListener('click', zoomOut)
+
+    this.render()
+
+    let handleScroll = this.handleScroll.bind(this)
+    this.container.addEventListener('scroll', handleScroll)
+
+    this.viewFinder.addEventListener('mousedown', this.handleViewFinderMousedown.bind(this))
+  }
+
+  // Fires when an instance was inserted into the document.
+  connectedCallback () {}
+
+  static get observedAttributes () {
+    return [
+      'zoom',
+      'offset-x',
+      'offset-y',
+      'scale',
+      'width',
+      'height',
+      'fill'
+    ]
+  }
+
+  // Fires when an attribute was added, removed, or updated.
+  attributeChangedCallback (attrName, oldVal, newVal) {
+    //console.log('attributeChangedCallback', attrName, oldVal, newVal)
+    if (oldVal !== newVal) {
+      this[attrName] = newVal
+      let event = new window.CustomEvent(attrName + '-change', {detail: newVal})
+      this.dispatchEvent(event)
+      switch (attrName) {
+        case 'zoom':
+          this.renderZoom()
+          this.renderSlotPosition()
+          break
+        case 'offset-x':
+          this.renderSlotPosition()
+          break
+        case 'offset-y':
+          this.renderSlotPosition()
+          break
+        case 'scale':
+          this.render()
+          break
+        case 'width':
+          this.render()
+          break
+        case 'height':
+          this.render()
+          break
+        case 'fill':
+          this.render()
+          break
+      }
+    }
+  }
+
+  render () {
+    if (this.scale === '0') {
+      // Set the initial scale so the slab best fills the width of its container.
+      let parentWidth = this.parentNode.offsetWidth
+      let parentHeight = this.parentNode.offsetHeight
+      if (this.fill === 'contain') {
+        if (((parentWidth / this.width) * this.height) > parentHeight) {
+          this.scale = (parentHeight / this.height)
+        } else {
+          this.scale = (parentWidth / this.width)
+        }
+      } else { // fill = cover
+        this.scale = parentWidth / this.width
+      }
+    }
+    if (this.zoom === '0') {
+      // Zoom in to the max
+      this.zoom = maximumScale / this.scale
+    }
+
+    this.style.width =
+      this.slab.style.width =
+      this.container.style.width =
+      (this.width * this.scale) + 'px'
+    this.style.height =
+      this.slab.style.height =
+      this.container.style.height =
+      (this.height * this.scale) + 'px'
+
+    this.viewFinder.scale = (viewFinderWidth / this.width)
+    this.viewFinder.style.width = viewFinderWidth + 'px'
+    this.viewFinder.style.height = Math.floor(this.viewFinder.scale * this.height) + 'px'
+    this.viewFinderBox.style.height = Math.floor(this.height * this.viewFinder.scale) + 'px'
+    this.viewFinderBox.style.width = Math.floor(this.width * this.viewFinder.scale) + 'px'
+
+    this._slot.style.width = this.width + 'px'
+    this._slot.style.height = this.height + 'px'
+    this.renderZoom()
+    this.renderSlotPosition()
+  }
+
+  renderZoom () {
+    if (Number(this.zoom) === 1) {
+      this.viewFinder.classList.add('is-zoom1')
+    } else {
+      this.viewFinder.classList.remove('is-zoom1')
+    }
+    // Disable zoom in button to prevent zooming in past the maximumScale
+    if (maximumScale / this.scale === Number(this.zoom)) {
+      this.zoomInEl.setAttribute('disabled', true)
+    } else if (this.zoomInEl.hasAttribute('disabled')) {
+      this.zoomInEl.removeAttribute('disabled')
+    }
+
+    // Prevent zooming out past 1
+    if (Number(this.zoom) <= 1) {
+      this.zoomOutEl.setAttribute('disabled', true)
+    } else if (this.zoomOutEl.hasAttribute('disabled')) {
+      this.zoomOutEl.removeAttribute('disabled')
+    }
+  }
+
+  renderSlotPosition () {
+    this.slotWrapper.style.width = ((this.width * this.scale) * this.zoom) + 'px'
+    this.slotWrapper.style.height = ((this.height * this.scale) * this.zoom) + 'px'
+    this._slot.style.transform = `scale(${this.scale * this.zoom})`
+
+    // Update the viewFinder box position and size
+    this.viewFinderBox.style.transform = `translate3d(${Math.floor(((this.offsetX * this.viewFinder.scale) / this.scale) / this.zoom)}px, ${Math.floor(((this.offsetY * this.viewFinder.scale) / this.scale) / this.zoom)}px, 0) scale(${1 / this.zoom})`
+    this.viewFinderBox.style.borderWidth = this.zoom + 'px'
+  }
+
+  moveBy (x, y) {
+    this.pageToOffset(this.viewFinder.startX + x, this.viewFinder.startY + y)
+  }
+  scrollTo (scrollLeft, scrollTop, animate) {
+    if (this.scrollAnimation) {
+      this.scrollAnimation.stop()
+      this.scrollAnimation = null
+    }
+    if (animate) {
+      this._slot.classList.add('is-animating')
+      this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
+    } else {
+      this._slot.classList.remove('is-animating')
+      this.container.scrollLeft = scrollLeft
+      this.container.scrollTop = scrollTop
+    }
+  }
+
+  pageToOffset (pageX, pageY, animate) {
+    if (this.scrollAnimation) {
+      this.scrollAnimation.stop()
+      this.scrollAnimation = null
+    }
+    this.viewFinder.x = pageX
+    this.viewFinder.y = pageY
+    // position the viewFinder box to the center of the click
+    let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
+    let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
+    // Trigger the scroll event for the container which will update the offsetX and offsetY.
+    let scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
+    let scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
+    if (animate) {
+      this._slot.classList.add('is-animating')
+      this.scrollAnimation = new ScrollAnimation(this.container, scrollLeft, scrollTop)
+    } else {
+      this._slot.classList.remove('is-animating')
+      this.container.scrollLeft = scrollLeft
+      this.container.scrollTop = scrollTop
+    }
+  }
+
+  handleScroll (ev) {
+    let x = (this.container.scrollLeft * this.viewFinder.scale)
+    let y = (this.container.scrollTop * this.viewFinder.scale)
+    this.offsetX = (x / this.viewFinder.scale)
+    this.offsetY = (y / this.viewFinder.scale)
+  }
+
+  handleViewFinderMousedown (ev) {
+    this.viewFinderClick({
+      type: 'tap',
+      pageX: ev.pageX,
+      pageY: ev.pageY
+    })
+  }
+
+  viewFinderClick (ev) {
+    // Position the click to the center of the viewFinderBox
+    const x = ev.pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
+    const y = ev.pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
+    switch (ev.type) {
+      case 'tap':
+        this.pageToOffset(x, y, true)
+        break
+      // TODO: Only tap is supported for now
+      case 'panstart':
+        this.viewFinderBox.classList.add('is-dragging')
+        this.viewFinder.x = this.viewFinder.startX = x
+        this.viewFinder.y = this.viewFinder.startY = y
+        break
+      case 'panmove':
+        // Drag the element
+        this.moveBy(ev.deltaX, ev.deltaY)
+        break
+      case 'panend':
+        // Save the new position
+        this.viewFinderBox.classList.remove('is-dragging')
+        this.moveBy(ev.deltaX, ev.deltaY)
+        break
+    }
+  }
+
+  zoomIn () {
+    const x = (Number(this.offsetX) * 2) + ((this.offsetWidth / 4) * 2)
+    const y = (Number(this.offsetY) * 2) + ((this.offsetHeight / 4) * 2)
+    const zoom = Math.min(maximumScale / this.scale, this.zoom * 2)
+    this.setAttribute('zoom', zoom)
+    // skip animating the scrollTo since the slab is also being zoomed
+    this.scrollTo(x, y, false)
+  }
+
+  zoomOut () {
+    const x = Math.max((Number(this.offsetX) / 2) - (this.offsetWidth / 4), 0)
+    const y = Math.max((Number(this.offsetY) / 2) - (this.offsetHeight / 4), 0)
+    this.setAttribute('zoom', Math.max(this.zoom / 2, 1.0))
+    // skip animating the scrollTo since the slab is also being zoomed
+    this.scrollTo(x, y, false)
+  }
+
+  // Reflect the prop with the attr
+  get offsetX () {
+    return this.getAttribute('offset-x')
+  }
+  set offsetX (val) {
+    this.setAttribute('offset-x', val)
+  }
+
+  get offsetY () {
+    return this.getAttribute('offset-y')
+  }
+  set offsetY (val) {
+    this.setAttribute('offset-y', val)
+  }
+
+  get width () {
+    return this.getAttribute('width')
+  }
+  set width (val) {
+    if (val !== this.width) { this.setAttribute('width', val) }
+  }
+
+  get height () {
+    return this.getAttribute('height')
+  }
+  set height (val) {
+    if (val !== this.height) { this.setAttribute('height', val) }
+  }
+
+  get fill () {
+    return this.getAttribute('fill')
+  }
+  set fill (val) {
+    if (val !== this.fill) { this.setAttribute('fill', val) }
+  }
+})
