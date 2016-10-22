@@ -59,10 +59,9 @@ window.customElements.define('slab-massive', class extends HTMLElement {
 
   // Fires when an attribute was added, removed, or updated.
   attributeChangedCallback (attrName, oldVal, newVal) {
+    // console.log('attributeChangedCallback', attrName, oldVal, newVal)
     if (oldVal !== newVal) {
       this[attrName] = newVal
-      let event = new window.CustomEvent(attrName + '-change', {detail: newVal})
-      this.dispatchEvent(event)
       switch (attrName) {
         case 'zoom':
           this.renderZoom()
@@ -91,7 +90,9 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   }
 
   render () {
-    if (this.scale === '0') {
+    const scale = Number(this.scale !== undefined ? this.scale : this.getAttribute('scale'))
+    const zoom = Number(this.zoom !== undefined ? this.zoom : this.getAttribute('zoom'))
+    if (scale === 0) {
       // Set the initial scale so the slab best fills the width of its container.
       let parentWidth = this.parentNode.offsetWidth
       let parentHeight = this.parentNode.offsetHeight
@@ -104,10 +105,12 @@ window.customElements.define('slab-massive', class extends HTMLElement {
       } else { // fill = cover
         this.scale = parentWidth / this.width
       }
+      this.attributeChangedCallback('scale', '0', this.scale)
     }
-    if (this.zoom === '0') {
+    if (zoom === 0) {
       // Zoom in to the max
       this.zoom = maximumScale / this.scale
+      this.attributeChangedCallback('zoom', '0', this.zoom)
     }
 
     this.style.width =
@@ -132,20 +135,20 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   }
 
   renderZoom () {
-    if (Number(this.zoom) === 1) {
+    if (this.zoom === 1) {
       this.viewFinder.classList.add('is-zoom1')
     } else {
       this.viewFinder.classList.remove('is-zoom1')
     }
     // Disable zoom in button to prevent zooming in past the maximumScale
-    if (maximumScale / this.scale === Number(this.zoom)) {
+    if (maximumScale / this.scale === this.zoom) {
       this.zoomInEl.setAttribute('disabled', true)
     } else if (this.zoomInEl.hasAttribute('disabled')) {
       this.zoomInEl.removeAttribute('disabled')
     }
 
     // Prevent zooming out past 1
-    if (Number(this.zoom) <= 1) {
+    if (this.zoom <= 1) {
       this.zoomOutEl.setAttribute('disabled', true)
     } else if (this.zoomOutEl.hasAttribute('disabled')) {
       this.zoomOutEl.removeAttribute('disabled')
@@ -249,6 +252,7 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     const y = (Number(this.offsetY) * 2) + ((this.offsetHeight / 4) * 2)
     const zoom = Math.min(maximumScale / this.scale, this.zoom * 2)
     this.setAttribute('zoom', zoom)
+    this.zoom = zoom
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
   }
@@ -256,7 +260,9 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   zoomOut () {
     const x = Math.max((Number(this.offsetX) / 2) - (this.offsetWidth / 4), 0)
     const y = Math.max((Number(this.offsetY) / 2) - (this.offsetHeight / 4), 0)
-    this.setAttribute('zoom', Math.max(this.zoom / 2, 1.0))
+    const zoom = Math.max(this.zoom / 2, 1.0)
+    this.setAttribute('zoom', zoom)
+    this.zoom = zoom
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
   }
