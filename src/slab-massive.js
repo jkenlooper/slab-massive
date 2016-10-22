@@ -59,7 +59,6 @@ window.customElements.define('slab-massive', class extends HTMLElement {
 
   // Fires when an attribute was added, removed, or updated.
   attributeChangedCallback (attrName, oldVal, newVal) {
-    //console.log('attributeChangedCallback', attrName, oldVal, newVal)
     if (oldVal !== newVal) {
       this[attrName] = newVal
       let event = new window.CustomEvent(attrName + '-change', {detail: newVal})

@@ -10,9 +10,12 @@
     "css-loader": "^0.23.1",
     "css-to-string-loader": "^0.1.2",
     "cssnano": "^3.5.2",
+    "csssources": "0.0.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
+    "html-minifier": "^3.1.0",
     "postcss-calc": "^5.2.1",
+    "postcss-cli": "^2.6.0",
     "postcss-custom-media": "^5.0.1",
     "postcss-custom-properties": "^5.0.0",
     "postcss-import": "^8.1.0",
@@ -23,27 +26,35 @@
     "standard": "^6.0.8",
     "style-loader": "^0.13.1",
     "svgo-loader": "^1.1.2",
+    "uglify-js": "https://github.com/mishoo/UglifyJS2/tarball/harmony",
     "webpack": "^2.1.0-beta.25"
   },
   "scripts": {
+    "minifycss-prerequisites": "csssources src/slab-massive.css > .minifycss-prerequisites",
+    "minifycss": "postcss -c postcss.config.js -o src/slab-massive.tmp.css src/slab-massive.css",
+    "minifyhtml": "html-minifier --case-sensitive --html5 --remove-attribute-quotes --remove-comments --remove-tag-whitespace --collapse-whitespace -o src/slab-massive.tmp.html src/slab-massive.html",
+    "minifyjs": "uglifyjs src/slab-massive.tmp.js --wrap slabMassive -c -m --keep-fnames --screw-ie8 -o dist/slab-massive.min.js",
     "pretest": "standard",
     "prebuild": "rm -rf dist; mkdir -p dist",
-    "build": "make && mv src/slab-massive.tmp.js dist/slab-massive.js",
+    "build": "make",
     "postbuild": "git update-index --no-assume-unchanged `git ls-files dist/`",
-    "preinstall": "npm run build",
+    "prepublish": "npm run build",
     "predebug": "git update-index --assume-unchanged `git ls-files dist/`",
     "debug": "npm run build",
-    "watch": "npm run debug -- --watch",
     "preversion": "npm test && npm run build",
     "version": "git add -f dist && git commit -m 'Add dist/ files' || echo 'No change to dist/ files'"
   },
   "standard": {
     "ignore": [
       "node_modules/*",
-      "dist"
+      "dist",
+      "tests",
+      "src/*.tmp*",
+      "src/_*.js",
+      "webpack.config.js"
     ]
   },
-  "main": "dist/slab-massive.js",
+  "main": "dist/slab-massive.min.js",
   "author": "Jake Hickenlooper",
   "license": "MIT",
   "dependencies": {}

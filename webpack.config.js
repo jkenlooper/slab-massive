@@ -9,6 +9,7 @@ var postcssCalc = require('postcss-calc')
 var postcssUrl = require('postcss-url')
 var autoprefixer = require('autoprefixer')
 var cssnano = require('cssnano')
+var postcssConfig = require('./postcss.config.js')
 
 var libraryName = 'slab-massive'
 
