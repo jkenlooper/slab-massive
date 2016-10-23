@@ -1,0 +1,10 @@
+.minifycss
+.minifyhtml
+src/scroll-animation.js
+src/_style-head.js
+src/slab-massive.tmp.css
+src/_style-foot.js
+src/_template-head.js
+src/slab-massive.tmp.html
+src/_template-foot.js
+src/slab-massive.js

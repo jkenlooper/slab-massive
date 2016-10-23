@@ -1,6 +1,6 @@
 const duration = 300
 
-class ScrollAnimation {
+class ScrollAnimation { // eslint-disable-line no-unused-vars
   constructor (element, x, y) {
     this.start = null
     this.element = element
@@ -31,4 +31,4 @@ class ScrollAnimation {
   }
 }
 
-export default ScrollAnimation
+// export default ScrollAnimation
