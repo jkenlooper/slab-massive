@@ -1,2 +1,8 @@
+.DS_Store
 /node_modules/
+/npm-debug.log
 /dist/
+/src/*.tmp.*
+.minifycss
+.minifycss-prerequisites
+.minifyhtml

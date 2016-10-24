@@ -23,7 +23,7 @@
   overflow: hidden;
 }
 
-/* Surrounds the actual `slot` element and is what gets scaled
+/* Surrounds the actual 'slot' element and is what gets scaled
  * when doing zoom. */
 .sm-Slab-slot {
   transform-origin: 0 0;

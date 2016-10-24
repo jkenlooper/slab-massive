@@ -1,13 +1,17 @@
+// webpack 2 docs https://gist.github.com/sokra/27b24881210b56bbaff7
 var webpack = require('webpack')
+var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var postcssImport = require('postcss-import')
-var postcssNested = require('postcss-nested')
 var postcssCustomProperties = require('postcss-custom-properties')
 var postcssCustomMedia = require('postcss-custom-media')
 var postcssCalc = require('postcss-calc')
 var postcssUrl = require('postcss-url')
 var autoprefixer = require('autoprefixer')
 var cssnano = require('cssnano')
+var postcssConfig = require('./postcss.config.js')
+
+var libraryName = 'slab-massive'
 
 /* Not needed for now.
 var ExtractHTML = new ExtractTextPlugin('[name].html', {
@@ -31,9 +35,7 @@ module.exports = function makeWebpackConfig () {
    * Entry
    * Reference: http://webpack.github.io/docs/configuration.html#entry
    */
-  config.entry = {
-    "slab-massive": './src/index.js'
-  }
+  config.entry = './src/index.js'
 
   /**
    * Output
@@ -41,16 +43,21 @@ module.exports = function makeWebpackConfig () {
    */
   config.output = {
     path: __dirname + '/dist',
-    filename: '[name].js'
+    filename: libraryName + '.js',
+    library: libraryName,
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
+    pathinfo: false
   }
 
   config.resolve = {
-    modulesDirectories: ['src', 'node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
   }
+  console.log(config.resolve.modules)
 
+  // Polyfills and such
   config.externals = {
-    'webcomponents.js': 'WebComponents',
-    'hammerjs': 'Hammer'
+    'webcomponents.js': 'WebComponents'
   }
 
   config.module = {
@@ -59,11 +66,6 @@ module.exports = function makeWebpackConfig () {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel'
-      },
-      {
-        test: /fonts\/.*\.(eot|svg|ttf|woff)$/,
-        loader: 'file-loader?name=[name].[ext]',
-        exclude: /node_modules/
       },
       {
         test: /\.(png|gif|jpg)$/,
@@ -78,12 +80,12 @@ module.exports = function makeWebpackConfig () {
       {
         test: /\.svg$/,
         loader: 'file-loader?name=[name].[ext]!svgo-loader',
-        exclude: /(node_modules|fonts)/
+        exclude: /(node_modules)/
       },
       {
         test: /\.html$/,
         loader: 'raw'
-      },
+      }
     ]
   }
 
@@ -91,36 +93,44 @@ module.exports = function makeWebpackConfig () {
     // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
     // Only emit files when there are no errors
     new webpack.NoErrorsPlugin(),
-
+    new webpack.optimize.UglifyJsPlugin({
+      compress: false,
+      mangle: false,
+      exclude: /\.js$/
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
       }
     }),
 
-    ExtractCSS,
+    new webpack.LoaderOptionsPlugin({
+      test: /\.xxx$/, // may apply this only for some modules
+      options: {
+        postcss: function (webpack) {
+          var use = [
+            postcssImport({
+              addDependencyTo: webpack
+            }),
+            postcssCustomProperties,
+            postcssCustomMedia,
+            postcssCalc,
+            autoprefixer,
+            postcssUrl
+          ]
+          if (this.minimize) {
+            use.push(cssnano({
+              safe: true
+            }))
+          }
+          return use
+        }
+      }
+    }),
+
+    ExtractCSS
     // ExtractHTML
   ]
-
-  config.postcss = function (webpack) {
-    var use = [
-      postcssImport({
-        addDependencyTo: webpack
-      }),
-      postcssNested,
-      postcssCustomProperties,
-      postcssCustomMedia,
-      postcssCalc,
-      autoprefixer,
-      postcssUrl
-    ]
-    if (this.minimize) {
-      use.push(cssnano({
-        safe: true
-      }))
-    }
-    return use
-  }
 
   return config
 }()

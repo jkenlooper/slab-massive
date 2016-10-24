@@ -1,8 +1,9 @@
-/* global HTMLElement */
-import Hammer from 'hammerjs'
+/* global HTMLElement, ScrollAnimation, style, template */
+/* Manually importing these
 import ScrollAnimation from './scroll-animation.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
+*/
 
 const html = `
   <style>${style}</style>
@@ -11,25 +12,25 @@ const html = `
 const viewFinderWidth = 150
 const maximumScale = 1
 
-class SlabMassive extends HTMLElement {
-  // Fires when an instance of the element is created.
-  createdCallback () {
-    this.style.display = 'block'
+window.customElements.define('slab-massive', class extends HTMLElement {
+  constructor () {
+    super()
+    const shadowRoot = this.attachShadow({mode: 'open'})
+    shadowRoot.innerHTML = html
 
-    this.createShadowRoot().innerHTML = html
-    this.slab = this.shadowRoot.querySelector('.sm-Slab')
-    this.container = this.shadowRoot.querySelector('.sm-Slab-container')
-    this._slot = this.shadowRoot.querySelector('.sm-Slab-slot')
-    this.slotWrapper = this.shadowRoot.querySelector('.sm-Slab-slotWrapper')
-    this.viewFinder = this.shadowRoot.querySelector('.sm-ViewFinder')
-    this.viewFinderBox = this.shadowRoot.querySelector('.sm-ViewFinder-box')
+    this.slab = shadowRoot.querySelector('.sm-Slab')
+    this.container = shadowRoot.querySelector('.sm-Slab-container')
+    this._slot = shadowRoot.querySelector('.sm-Slab-slot')
+    this.slotWrapper = shadowRoot.querySelector('.sm-Slab-slotWrapper')
+    this.viewFinder = shadowRoot.querySelector('.sm-ViewFinder')
+    this.viewFinderBox = shadowRoot.querySelector('.sm-ViewFinder-box')
     this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
     this.viewFinder.y = (this.viewFinder.offsetTop + this.offsetTop)
 
-    this.zoomInEl = this.shadowRoot.querySelector('.sm-Slab-zoomIn')
+    this.zoomInEl = shadowRoot.querySelector('.sm-Slab-zoomIn')
     let zoomIn = this.zoomIn.bind(this)
     this.zoomInEl.addEventListener('click', zoomIn)
-    this.zoomOutEl = this.shadowRoot.querySelector('.sm-Slab-zoomOut')
+    this.zoomOutEl = shadowRoot.querySelector('.sm-Slab-zoomOut')
     let zoomOut = this.zoomOut.bind(this)
     this.zoomOutEl.addEventListener('click', zoomOut)
 
@@ -38,21 +39,29 @@ class SlabMassive extends HTMLElement {
     let handleScroll = this.handleScroll.bind(this)
     this.container.addEventListener('scroll', handleScroll)
 
-    let mc = new Hammer.Manager(this.viewFinder, {})
-    mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_ALL }))
-    mc.add(new Hammer.Tap())
-    mc.on('tap panstart panmove panend', Hammer.bindFn(this.viewFinderClick, this))
+    this.viewFinder.addEventListener('mousedown', this.handleViewFinderMousedown.bind(this))
   }
 
   // Fires when an instance was inserted into the document.
-  attachedCallback () {}
+  connectedCallback () {}
+
+  static get observedAttributes () {
+    return [
+      'zoom',
+      'offset-x',
+      'offset-y',
+      'scale',
+      'width',
+      'height',
+      'fill'
+    ]
+  }
 
   // Fires when an attribute was added, removed, or updated.
   attributeChangedCallback (attrName, oldVal, newVal) {
+    // console.log('attributeChangedCallback', attrName, oldVal, newVal)
     if (oldVal !== newVal) {
       this[attrName] = newVal
-      let event = new window.CustomEvent(attrName + '-change', {detail: newVal})
-      this.dispatchEvent(event)
       switch (attrName) {
         case 'zoom':
           this.renderZoom()
@@ -81,7 +90,9 @@ class SlabMassive extends HTMLElement {
   }
 
   render () {
-    if (this.scale === '0') {
+    const scale = Number(this.scale !== undefined ? this.scale : this.getAttribute('scale'))
+    const zoom = Number(this.zoom !== undefined ? this.zoom : this.getAttribute('zoom'))
+    if (scale === 0) {
       // Set the initial scale so the slab best fills the width of its container.
       let parentWidth = this.parentNode.offsetWidth
       let parentHeight = this.parentNode.offsetHeight
@@ -94,6 +105,12 @@ class SlabMassive extends HTMLElement {
       } else { // fill = cover
         this.scale = parentWidth / this.width
       }
+      this.attributeChangedCallback('scale', '0', this.scale)
+    }
+    if (zoom === 0) {
+      // Zoom in to the max
+      this.zoom = maximumScale / this.scale
+      this.attributeChangedCallback('zoom', '0', this.zoom)
     }
 
     this.style.width =
@@ -118,20 +135,20 @@ class SlabMassive extends HTMLElement {
   }
 
   renderZoom () {
-    if (Number(this.zoom) === 1) {
+    if (this.zoom === 1) {
       this.viewFinder.classList.add('is-zoom1')
     } else {
       this.viewFinder.classList.remove('is-zoom1')
     }
     // Disable zoom in button to prevent zooming in past the maximumScale
-    if (maximumScale / this.scale === Number(this.zoom)) {
+    if (maximumScale / this.scale === this.zoom) {
       this.zoomInEl.setAttribute('disabled', true)
     } else if (this.zoomInEl.hasAttribute('disabled')) {
       this.zoomInEl.removeAttribute('disabled')
     }
 
     // Prevent zooming out past 1
-    if (Number(this.zoom) <= 1) {
+    if (this.zoom <= 1) {
       this.zoomOutEl.setAttribute('disabled', true)
     } else if (this.zoomOutEl.hasAttribute('disabled')) {
       this.zoomOutEl.removeAttribute('disabled')
@@ -196,14 +213,23 @@ class SlabMassive extends HTMLElement {
     this.offsetY = (y / this.viewFinder.scale)
   }
 
+  handleViewFinderMousedown (ev) {
+    this.viewFinderClick({
+      type: 'tap',
+      pageX: ev.pageX,
+      pageY: ev.pageY
+    })
+  }
+
   viewFinderClick (ev) {
     // Position the click to the center of the viewFinderBox
-    const x = ev.pointers[0].pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
-    const y = ev.pointers[0].pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
+    const x = ev.pageX - (this.viewFinderBox.offsetWidth / this.zoom) / 2
+    const y = ev.pageY - (this.viewFinderBox.offsetHeight / this.zoom) / 2
     switch (ev.type) {
       case 'tap':
         this.pageToOffset(x, y, true)
         break
+      // TODO: Only tap is supported for now
       case 'panstart':
         this.viewFinderBox.classList.add('is-dragging')
         this.viewFinder.x = this.viewFinder.startX = x
@@ -226,6 +252,7 @@ class SlabMassive extends HTMLElement {
     const y = (Number(this.offsetY) * 2) + ((this.offsetHeight / 4) * 2)
     const zoom = Math.min(maximumScale / this.scale, this.zoom * 2)
     this.setAttribute('zoom', zoom)
+    this.zoom = zoom
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
   }
@@ -233,26 +260,14 @@ class SlabMassive extends HTMLElement {
   zoomOut () {
     const x = Math.max((Number(this.offsetX) / 2) - (this.offsetWidth / 4), 0)
     const y = Math.max((Number(this.offsetY) / 2) - (this.offsetHeight / 4), 0)
-    this.setAttribute('zoom', Math.max(this.zoom / 2, 1.0))
+    const zoom = Math.max(this.zoom / 2, 1.0)
+    this.setAttribute('zoom', zoom)
+    this.zoom = zoom
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
   }
 
-  // Reflect the width prop with the attr
-  get scale () {
-    return this.getAttribute('scale')
-  }
-  set scale (val) {
-    this.setAttribute('scale', val)
-  }
-
-  get zoom () {
-    return this.getAttribute('zoom')
-  }
-  set zoom (val) {
-    this.setAttribute('zoom', val)
-  }
-
+  // Reflect the prop with the attr
   get offsetX () {
     return this.getAttribute('offset-x')
   }
@@ -271,22 +286,20 @@ class SlabMassive extends HTMLElement {
     return this.getAttribute('width')
   }
   set width (val) {
-    this.setAttribute('width', val)
+    if (val !== this.width) { this.setAttribute('width', val) }
   }
 
   get height () {
     return this.getAttribute('height')
   }
   set height (val) {
-    this.setAttribute('height', val)
+    if (val !== this.height) { this.setAttribute('height', val) }
   }
 
   get fill () {
     return this.getAttribute('fill')
   }
   set fill (val) {
-    this.setAttribute('fill', val)
+    if (val !== this.fill) { this.setAttribute('fill', val) }
   }
-}
-
-export default SlabMassive
+})
