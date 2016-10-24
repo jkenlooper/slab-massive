@@ -1,6 +1,6 @@
 {
   "name": "slab-massive",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Web Component for displaying and navigating partial content",
   "devDependencies": {
     "autoprefixer": "^6.3.6",
