@@ -17,6 +17,10 @@ td {
   outline: 2px solid black;
   background-color: gray;
 }
+.Example:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
 
 .Example--scrollable {
   overflow: auto;

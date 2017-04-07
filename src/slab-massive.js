@@ -1,6 +1,8 @@
-/* global HTMLElement, ScrollAnimation, style, template */
+/* global HTMLElement, ScrollAnimation, fullscreen, debounce, style, template */
 /* Manually importing these
 import ScrollAnimation from './scroll-animation.js'
+import fullscreen from './fullscreen.js'
+import debounce from './debounce.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
 */
@@ -40,6 +42,14 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.container.addEventListener('scroll', handleScroll)
 
     this.viewFinder.addEventListener('mousedown', this.handleViewFinderMousedown.bind(this))
+
+    this.fullscreenButton = shadowRoot.querySelector('.sm-Slab-fullscreen')
+    let wrapper = this.parentElement
+    fullscreen(this.fullscreenButton, wrapper, this)
+
+    window.addEventListener('deviceorientation', this.handleWindowResize.bind(this))
+    let handleWindowResizeDebounced = debounce(this.handleWindowResize, 100, false).bind(this)
+    window.addEventListener('resize', handleWindowResizeDebounced)
   }
 
   // Fires when an instance was inserted into the document.
@@ -211,6 +221,18 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     let y = (this.container.scrollTop * this.viewFinder.scale)
     this.offsetX = (x / this.viewFinder.scale)
     this.offsetY = (y / this.viewFinder.scale)
+  }
+
+  handleWindowResize (ev) {
+    const isFullscreen = document.mozFullScreenElement || document.fullscreenElement || document.webkitFullscreenElement
+    if (isFullscreen) {
+      this.scale = 0
+      this.fill = 'contain'
+    } else {
+      this.scale = this.getAttribute('scale')
+      this.fill = this.getAttribute('fill')
+    }
+    this.render()
   }
 
   handleViewFinderMousedown (ev) {
