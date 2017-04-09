@@ -18,7 +18,8 @@ var ExtractHTML = new ExtractTextPlugin('[name].html', {
   allChunks: true
 })
 */
-var ExtractCSS = new ExtractTextPlugin('[name].css', {
+var extractCSS = new ExtractTextPlugin({
+  filename: '[name].css',
   allChunks: true
 })
 
@@ -35,14 +36,14 @@ module.exports = function makeWebpackConfig () {
    * Entry
    * Reference: http://webpack.github.io/docs/configuration.html#entry
    */
-  config.entry = './src/index.js'
+  config.entry = './index.js'
 
   /**
    * Output
    * Reference: http://webpack.github.io/docs/configuration.html#output
    */
   config.output = {
-    path: __dirname + '/dist',
+    path: path.resolve(__dirname, './dist'),
     filename: libraryName + '.js',
     library: libraryName,
     libraryTarget: 'umd',
@@ -51,9 +52,8 @@ module.exports = function makeWebpackConfig () {
   }
 
   config.resolve = {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: [path.resolve(__dirname, './src'), 'node_modules']
   }
-  console.log(config.resolve.modules)
 
   // Polyfills and such
   config.externals = {
@@ -61,11 +61,11 @@ module.exports = function makeWebpackConfig () {
   }
 
   config.module = {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel'
+        loader: 'babel-loader'
       },
       {
         test: /\.(png|gif|jpg)$/,
@@ -74,7 +74,11 @@ module.exports = function makeWebpackConfig () {
       },
       {
         test: /\.css$/,
-        loader: 'css-to-string-loader!css-loader!postcss-loader',
+        use: extractCSS.extract([
+          'css-to-string-loader',
+          'css-loader',
+          'postcss-loader'
+        ]),
         exclude: /node_modules/
       },
       {
@@ -84,7 +88,7 @@ module.exports = function makeWebpackConfig () {
       },
       {
         test: /\.html$/,
-        loader: 'raw'
+        loader: 'raw-loader'
       }
     ]
   }
@@ -92,7 +96,7 @@ module.exports = function makeWebpackConfig () {
   config.plugins = [
     // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
     // Only emit files when there are no errors
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: false,
       mangle: false,
@@ -128,7 +132,7 @@ module.exports = function makeWebpackConfig () {
       }
     }),
 
-    ExtractCSS
+    extractCSS
     // ExtractHTML
   ]
 

@@ -31,4 +31,4 @@ class ScrollAnimation { // eslint-disable-line no-unused-vars
   }
 }
 
-// export default ScrollAnimation
+export default ScrollAnimation

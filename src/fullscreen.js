@@ -1,5 +1,5 @@
 /* global Element */
-function fullscreen (button, element) { // eslint-disable-line no-unused-vars
+function fullscreen (button, element) {
   function toggleFullScreen () {
     if (!document.mozFullScreenElement && !document.fullscreenElement && !document.webkitFullscreenElement) {
       if (element.mozRequestFullScreen) {
@@ -24,3 +24,5 @@ function fullscreen (button, element) { // eslint-disable-line no-unused-vars
   return {
   }
 }
+
+export default fullscreen
