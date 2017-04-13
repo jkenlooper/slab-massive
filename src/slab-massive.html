@@ -1,8 +1,8 @@
 <div class="sm-Slab">
-  <div class="sm-ViewFinder">
+  <div id="sm-viewfinder" class="sm-ViewFinder">
     <slot id="view-finder" name="view-finder">
     </slot>
-    <div class="sm-ViewFinder-box"></div>
+    <div id="sm-viewfinderbox" class="sm-ViewFinder-box"></div>
   </div>
   <div class="sm-Slab-container"
      unselectable="on"
@@ -16,8 +16,8 @@
     </div>
   </div>
   <div class="sm-Slab-zoomControls">
-    <button class="sm-Slab-zoomIn" ng-click="PuzzleBoardController.zoomIn()">+</button>
-    <button class="sm-Slab-zoomOut" ng-click="PuzzleBoardController.zoomOut()">-</button>
-    <button class="sm-Slab-fullscreen">^</button>
+    <button id="sm-zoomin-button" class="sm-Slab-zoomIn">+</button>
+    <button id="sm-zoomout-button" class="sm-Slab-zoomOut">-</button>
+    <button id="sm-fullscreen-button" class="sm-Slab-fullscreen">&#10530;</button>
   </div>
 </div>

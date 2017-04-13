@@ -34,15 +34,17 @@
 }
 
 .sm-Slab-zoomControls {
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  left: 0;
+}
+.sm-Slab-zoomControls > * + * {
+  margin-left: 10px;
 }
 
+.sm-Slab-fullscreen,
 .sm-Slab-zoomIn,
 .sm-Slab-zoomOut {
-  display: block;
-  margin: 10px;
+  display: inline-block;
   width: 30px;
   height: 30px;
   text-align: center;

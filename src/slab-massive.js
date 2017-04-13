@@ -24,15 +24,15 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.container = shadowRoot.querySelector('.sm-Slab-container')
     this._slot = shadowRoot.querySelector('.sm-Slab-slot')
     this.slotWrapper = shadowRoot.querySelector('.sm-Slab-slotWrapper')
-    this.viewFinder = shadowRoot.querySelector('.sm-ViewFinder')
-    this.viewFinderBox = shadowRoot.querySelector('.sm-ViewFinder-box')
+    this.viewFinder = shadowRoot.getElementById('sm-viewfinder')
+    this.viewFinderBox = shadowRoot.getElementById('sm-viewfinderbox')
     this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
     this.viewFinder.y = (this.viewFinder.offsetTop + this.offsetTop)
 
-    this.zoomInEl = shadowRoot.querySelector('.sm-Slab-zoomIn')
+    this.zoomInEl = shadowRoot.getElementById('sm-zoomin-button')
     let zoomIn = this.zoomIn.bind(this)
     this.zoomInEl.addEventListener('click', zoomIn)
-    this.zoomOutEl = shadowRoot.querySelector('.sm-Slab-zoomOut')
+    this.zoomOutEl = shadowRoot.getElementById('sm-zoomout-button')
     let zoomOut = this.zoomOut.bind(this)
     this.zoomOutEl.addEventListener('click', zoomOut)
 
@@ -43,7 +43,7 @@ window.customElements.define('slab-massive', class extends HTMLElement {
 
     this.viewFinder.addEventListener('mousedown', this.handleViewFinderMousedown.bind(this))
 
-    this.fullscreenButton = shadowRoot.querySelector('.sm-Slab-fullscreen')
+    this.fullscreenButton = shadowRoot.getElementById('sm-fullscreen-button')
     let wrapper = this.parentElement
     fullscreen(this.fullscreenButton, wrapper, this)
 
