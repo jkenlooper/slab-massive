@@ -2,20 +2,39 @@
   top: 30px;
   left: 0;
   cursor: crosshair;
-  outline: 1px solid black;
-  background-color: rgba(255, 255, 255, 0.4);
 }
 
-.sm-ViewFinder.is-zoom1 {
-  display: none;
+.sm-ViewFinder::before,
+.sm-ViewFinder::after {
+  position: absolute;
+  opacity: 0.5;
+  width: 20%;
+  height: 20%;
+  content: "";
+}
+
+.sm-ViewFinder::before {
+  top: 0;
+  left: 0;
+  border-top: 4px ridge white;
+  border-left: 4px ridge white;
+}
+
+.sm-ViewFinder::after {
+  right: 0;
+  bottom: 0;
+  border-right: 4px ridge white;
+  border-bottom: 4px ridge white;
 }
 
 .sm-ViewFinder-box {
   transform: translate3d(0px, 0px, 0);
   transform-origin: 0 0;
+  opacity: 0.5;
   transition: transform 300ms linear;
   cursor: crosshair;
-  border: 1px solid red;
+  border: 1px dashed black;
+  background-color: rgba(255, 255, 255, 0.4);
   width: 30px;
   height: 30px;
 }

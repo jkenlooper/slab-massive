@@ -29,6 +29,7 @@
   transform-origin: 0 0;
   outline: 1px solid red;
 }
+
 .sm-Slab-slot.is-animating {
   transition: transform 500ms linear;
 }
@@ -37,15 +38,28 @@
   top: 0;
   left: 0;
 }
-.sm-Slab-zoomControls > * + * {
-  margin-left: 10px;
-}
 
 .sm-Slab-fullscreen,
 .sm-Slab-zoomIn,
 .sm-Slab-zoomOut {
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 0;
+  border-radius: 35% 35% 0 0;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0 0.4em 0.2em;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2em;
+}
+
+.sm-Slab-fullscreen:disabled,
+.sm-Slab-zoomIn:disabled,
+.sm-Slab-zoomOut:disabled {
+  opacity: 0.5;
+  cursor: default;
 }

@@ -184,11 +184,6 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   }
 
   renderZoom () {
-    if (this.zoom === 1) {
-      this.viewFinder.classList.add('is-zoom1')
-    } else {
-      this.viewFinder.classList.remove('is-zoom1')
-    }
     // Disable zoom in button to prevent zooming in past the maximumScale
     if (maximumScale / this.scale === this.zoom) {
       this.zoomInEl.setAttribute('disabled', true)
