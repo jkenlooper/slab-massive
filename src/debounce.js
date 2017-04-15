@@ -2,7 +2,7 @@
 // be triggered. The function will be called after it stops being called for
 // N milliseconds. If `immediate` is passed, trigger the function on the
 // leading edge, instead of the trailing.
-function debounce (func, wait, immediate) { // eslint-disable-line no-unused-vars
+function debounce (func, wait, immediate) {
   let timeout
   return function () {
     const context = this
@@ -17,3 +17,5 @@ function debounce (func, wait, immediate) { // eslint-disable-line no-unused-var
     if (callNow) func.apply(context, args)
   }
 }
+
+export default debounce
