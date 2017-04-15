@@ -20,7 +20,11 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     const shadowRoot = this.attachShadow({mode: 'open'})
     shadowRoot.innerHTML = html
 
-    this.slab = shadowRoot.querySelector('.sm-Slab')
+    this.flags = {
+      isMinimized: false
+    }
+
+    this.slab = shadowRoot.getElementById('sm-slab')
     this.container = shadowRoot.querySelector('.sm-Slab-container')
     this._slot = shadowRoot.querySelector('.sm-Slab-slot')
     this.slotWrapper = shadowRoot.querySelector('.sm-Slab-slotWrapper')
@@ -35,6 +39,8 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.zoomOutEl = shadowRoot.getElementById('sm-zoomout-button')
     let zoomOut = this.zoomOut.bind(this)
     this.zoomOutEl.addEventListener('click', zoomOut)
+    this.toggleEl = shadowRoot.getElementById('sm-toggle-button')
+    this.toggleEl.addEventListener('click', this.toggle.bind(this))
 
     this.render()
 
@@ -323,6 +329,11 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.zoom = zoom
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
+  }
+
+  toggle () {
+    this.flags.isMinimized = !this.flags.isMinimized
+    this.slab.classList.toggle('is-minimized', this.flags.isMinimized)
   }
 
   // Reflect the prop with the attr

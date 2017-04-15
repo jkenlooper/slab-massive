@@ -1,4 +1,4 @@
-<div class="sm-Slab">
+<div id="sm-slab" class="sm-Slab">
   <div id="sm-viewfinder" class="sm-ViewFinder">
     <slot id="view-finder" name="view-finder">
     </slot>
@@ -16,8 +16,25 @@
     </div>
   </div>
   <div class="sm-Slab-zoomControls">
-    <button id="sm-zoomin-button" class="sm-Slab-zoomIn">+</button>
-    <button id="sm-zoomout-button" class="sm-Slab-zoomOut">-</button>
-    <button id="sm-fullscreen-button" class="sm-Slab-fullscreen">&#10530;</button>
+    <button id="sm-zoomin-button" class="sm-Slab-button">
+      <span class="sm-Slab-buttonText">
+        +
+      </span>
+    </button>
+    <button id="sm-zoomout-button" class="sm-Slab-button">
+      <span class="sm-Slab-buttonText">
+        -
+      </span>
+    </button>
+    <button id="sm-fullscreen-button" class="sm-Slab-button">
+      <span class="sm-Slab-buttonText">
+        &harr;
+      </span>
+    </button>
+    <button id="sm-toggle-button" class="sm-Slab-button sm-Slab-button--toggle">
+      <span class="sm-Slab-buttonText">
+        &#9650;
+      </span>
+    </button>
   </div>
 </div>
