@@ -23,6 +23,11 @@ export default {
     html({
       include: 'src/**/*.html',
       htmlMinifierOptions: {
+        caseSensitive: true,
+        html5: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+        removeTagWhitespace: true,
         collapseWhitespace: true,
         collapseBooleanAttributes: true,
         conservativeCollapse: true,

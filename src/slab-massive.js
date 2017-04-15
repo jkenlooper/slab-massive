@@ -10,7 +10,7 @@ const html = `
 Slab Massive ${version}
 ${description}
 ${author}
-${repository}
+${repository.url}
 -->
 <style>${style}</style>
 ${template}

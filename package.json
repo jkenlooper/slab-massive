@@ -37,19 +37,12 @@
     "standard": "^6.0.8"
   },
   "scripts": {
-    "roll": "rollup -c",
-    "start": "webpack --config webpack.config.js",
-    "minifycss-prerequisites": "csssources src/slab-massive.css > .minifycss-prerequisites",
-    "minifycss": "postcss -c postcss.config.js -o src/slab-massive.tmp.css src/slab-massive.css",
-    "minifyhtml": "html-minifier --case-sensitive --html5 --remove-attribute-quotes --remove-comments --remove-tag-whitespace --collapse-whitespace -o src/slab-massive.tmp.html src/slab-massive.html",
-    "minifyjs": "uglifyjs src/slab-massive.tmp.js --wrap slabMassive -c -m --keep-fnames --screw-ie8 -o dist/slab-massive.min.js",
+    "rollup": "rollup -c",
     "pretest": "standard",
     "prebuild": "rm -rf dist; mkdir -p dist",
-    "build": "make",
+    "build": "BABEL_ENV=production npm run rollup",
     "postbuild": "git update-index --no-assume-unchanged `git ls-files dist/`",
     "prepublish": "npm run build",
-    "predebug": "git update-index --assume-unchanged `git ls-files dist/`",
-    "debug": "npm run build",
     "preversion": "npm test && npm run build",
     "version": "git add -f dist && git commit -m 'Add dist/ files' || echo 'No change to dist/ files'"
   },
@@ -58,10 +51,7 @@
       "node_modules/*",
       "dist",
       "tests",
-      "src/*.tmp*",
-      "src/_*.js",
-      "src/rollup-postcss-inline.js",
-      "webpack.config.js"
+      "src/rollup-postcss-inline.js"
     ]
   },
   "main": "dist/slab-massive.min.js",
