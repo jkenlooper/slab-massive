@@ -1,17 +1,20 @@
 /* global HTMLElement */
-/* Manually importing these
- *, ScrollAnimation, fullscreen, debounce, style, template
-*/
 import ScrollAnimation from './scroll-animation.js'
 import fullscreen from './fullscreen.js'
 import debounce from './debounce.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
-
+import { version, description, author, repository } from '../package.json'
 const html = `
-  <style>${style}</style>
-  ${template}
-  `
+<!--
+Slab Massive ${version}
+${description}
+${author}
+${repository}
+-->
+<style>${style}</style>
+${template}
+`
 const viewFinderMax = 150
 const maximumScale = 1
 
