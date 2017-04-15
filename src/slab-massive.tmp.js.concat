@@ -1,6 +1,8 @@
 .minifycss
 .minifyhtml
 src/scroll-animation.js
+src/fullscreen.js
+src/debounce.js
 src/_style-head.js
 src/slab-massive.tmp.css
 src/_style-foot.js

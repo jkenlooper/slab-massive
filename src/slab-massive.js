@@ -1,6 +1,8 @@
-/* global HTMLElement, ScrollAnimation, style, template */
+/* global HTMLElement, ScrollAnimation, fullscreen, debounce, style, template */
 /* Manually importing these
 import ScrollAnimation from './scroll-animation.js'
+import fullscreen from './fullscreen.js'
+import debounce from './debounce.js'
 import style from './slab-massive.css'
 import template from './slab-massive.html'
 */
@@ -9,7 +11,7 @@ const html = `
   <style>${style}</style>
   ${template}
   `
-const viewFinderWidth = 150
+const viewFinderMax = 150
 const maximumScale = 1
 
 window.customElements.define('slab-massive', class extends HTMLElement {
@@ -18,21 +20,27 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     const shadowRoot = this.attachShadow({mode: 'open'})
     shadowRoot.innerHTML = html
 
-    this.slab = shadowRoot.querySelector('.sm-Slab')
+    this.flags = {
+      isMinimized: false
+    }
+
+    this.slab = shadowRoot.getElementById('sm-slab')
     this.container = shadowRoot.querySelector('.sm-Slab-container')
     this._slot = shadowRoot.querySelector('.sm-Slab-slot')
     this.slotWrapper = shadowRoot.querySelector('.sm-Slab-slotWrapper')
-    this.viewFinder = shadowRoot.querySelector('.sm-ViewFinder')
-    this.viewFinderBox = shadowRoot.querySelector('.sm-ViewFinder-box')
+    this.viewFinder = shadowRoot.getElementById('sm-viewfinder')
+    this.viewFinderBox = shadowRoot.getElementById('sm-viewfinderbox')
     this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
     this.viewFinder.y = (this.viewFinder.offsetTop + this.offsetTop)
 
-    this.zoomInEl = shadowRoot.querySelector('.sm-Slab-zoomIn')
+    this.zoomInEl = shadowRoot.getElementById('sm-zoomin-button')
     let zoomIn = this.zoomIn.bind(this)
     this.zoomInEl.addEventListener('click', zoomIn)
-    this.zoomOutEl = shadowRoot.querySelector('.sm-Slab-zoomOut')
+    this.zoomOutEl = shadowRoot.getElementById('sm-zoomout-button')
     let zoomOut = this.zoomOut.bind(this)
     this.zoomOutEl.addEventListener('click', zoomOut)
+    this.toggleEl = shadowRoot.getElementById('sm-toggle-button')
+    this.toggleEl.addEventListener('click', this.toggle.bind(this))
 
     this.render()
 
@@ -40,6 +48,14 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.container.addEventListener('scroll', handleScroll)
 
     this.viewFinder.addEventListener('mousedown', this.handleViewFinderMousedown.bind(this))
+
+    this.fullscreenButton = shadowRoot.getElementById('sm-fullscreen-button')
+    let wrapper = this.parentElement
+    fullscreen(this.fullscreenButton, wrapper, this)
+
+    window.addEventListener('deviceorientation', this.handleWindowResize.bind(this))
+    let handleWindowResizeDebounced = debounce(this.handleWindowResize, 100, false).bind(this)
+    window.addEventListener('resize', handleWindowResizeDebounced)
   }
 
   // Fires when an instance was inserted into the document.
@@ -50,7 +66,6 @@ window.customElements.define('slab-massive', class extends HTMLElement {
       'zoom',
       'offset-x',
       'offset-y',
-      'scale',
       'width',
       'height',
       'fill'
@@ -73,9 +88,6 @@ window.customElements.define('slab-massive', class extends HTMLElement {
         case 'offset-y':
           this.renderSlotPosition()
           break
-        case 'scale':
-          this.render()
-          break
         case 'width':
           this.render()
           break
@@ -90,43 +102,86 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   }
 
   render () {
-    const scale = Number(this.scale !== undefined ? this.scale : this.getAttribute('scale'))
     const zoom = Number(this.zoom !== undefined ? this.zoom : this.getAttribute('zoom'))
-    if (scale === 0) {
-      // Set the initial scale so the slab best fills the width of its container.
-      let parentWidth = this.parentNode.offsetWidth
-      let parentHeight = this.parentNode.offsetHeight
-      if (this.fill === 'contain') {
-        if (((parentWidth / this.width) * this.height) > parentHeight) {
-          this.scale = (parentHeight / this.height)
-        } else {
-          this.scale = (parentWidth / this.width)
-        }
-      } else { // fill = cover
-        this.scale = parentWidth / this.width
+    // Set the initial scale so the slab best fills the width of its container.
+    let parentWidth = this.parentNode.offsetWidth
+    let parentHeight = this.parentNode.offsetHeight
+    const isWideContainer = parentWidth > parentHeight
+    const isWideSlab = this.width > this.height
+
+    if (this.fill === 'contain') {
+      if (((parentWidth / this.width) * this.height) > parentHeight) {
+        this.scale = (parentHeight / this.height)
+      } else {
+        this.scale = (parentWidth / this.width)
       }
-      this.attributeChangedCallback('scale', '0', this.scale)
+    } else { // fill = cover
+      // scale the slab so it completely covers the container with excess overflowing
+      if ((isWideContainer && isWideSlab) || (!isWideContainer && !isWideSlab)) {
+        // Both the container and slab are similar aspect ratio; scale by ...
+        this.scale = Math.max(parentHeight, parentWidth) / Math.max(this.height, this.width)
+      } else if (isWideContainer && !isWideSlab) {
+        this.scale = Math.max(parentHeight, parentWidth) / this.width
+      } else if (!isWideContainer && isWideSlab) {
+        this.scale = Math.max(parentHeight, parentWidth) / this.height
+      }
     }
+
     if (zoom === 0) {
       // Zoom in to the max
       this.zoom = maximumScale / this.scale
       this.attributeChangedCallback('zoom', '0', this.zoom)
     }
 
+    // Prevent overflowing when resizing
     this.style.width =
       this.slab.style.width =
       this.container.style.width =
-      (this.width * this.scale) + 'px'
+      parentWidth + 'px'
     this.style.height =
       this.slab.style.height =
       this.container.style.height =
-      (this.height * this.scale) + 'px'
+      parentHeight + 'px'
 
-    this.viewFinder.scale = (viewFinderWidth / this.width)
-    this.viewFinder.style.width = viewFinderWidth + 'px'
-    this.viewFinder.style.height = Math.floor(this.viewFinder.scale * this.height) + 'px'
-    this.viewFinderBox.style.height = Math.floor(this.height * this.viewFinder.scale) + 'px'
-    this.viewFinderBox.style.width = Math.floor(this.width * this.viewFinder.scale) + 'px'
+    if ((isWideContainer && isWideSlab) || (!isWideContainer && !isWideSlab)) {
+      // Both the container and slab are both wide or both narrow; scale by largest dimension
+      this.viewFinder.scale = viewFinderMax / Math.max(this.height, this.width)
+    } else if (isWideContainer && !isWideSlab) {
+      this.viewFinder.scale = viewFinderMax / this.width
+    } else if (!isWideContainer && isWideSlab) {
+      this.viewFinder.scale = viewFinderMax / this.height
+    }
+
+    let viewFinderBoxWidth = 0
+    let viewFinderBoxHeight = 0
+    let viewFinderWidth = this.width * this.viewFinder.scale
+    let viewFinderHeight = this.height * this.viewFinder.scale
+
+    if (isWideContainer && isWideSlab) {
+      // both wide
+      viewFinderBoxWidth = viewFinderMax
+      viewFinderBoxHeight = (parentHeight / parentWidth) * viewFinderMax
+    } else if (!isWideContainer && !isWideSlab) {
+      // both narrow
+      viewFinderBoxWidth = (parentWidth / parentHeight) * viewFinderMax
+      viewFinderBoxHeight = viewFinderMax
+    } else if (isWideContainer) {
+      // wide container and narrow slab
+      viewFinderBoxWidth = viewFinderMax
+      viewFinderBoxHeight = (parentHeight / parentWidth) * viewFinderMax
+    } else if (isWideSlab) {
+      // narrow container and wide slab
+      viewFinderBoxWidth = (parentWidth / parentHeight) * viewFinderMax
+      viewFinderBoxHeight = viewFinderMax
+    }
+
+    // Match aspect ratio of slab
+    this.viewFinder.style.width = Math.floor(viewFinderWidth) + 'px'
+    this.viewFinder.style.height = Math.floor(viewFinderHeight) + 'px'
+
+    // Match aspect ratio of container
+    this.viewFinderBox.style.width = Math.floor(viewFinderBoxWidth) + 'px'
+    this.viewFinderBox.style.height = Math.floor(viewFinderBoxHeight) + 'px'
 
     this._slot.style.width = this.width + 'px'
     this._slot.style.height = this.height + 'px'
@@ -135,11 +190,6 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   }
 
   renderZoom () {
-    if (this.zoom === 1) {
-      this.viewFinder.classList.add('is-zoom1')
-    } else {
-      this.viewFinder.classList.remove('is-zoom1')
-    }
     // Disable zoom in button to prevent zooming in past the maximumScale
     if (maximumScale / this.scale === this.zoom) {
       this.zoomInEl.setAttribute('disabled', true)
@@ -184,6 +234,10 @@ window.customElements.define('slab-massive', class extends HTMLElement {
   }
 
   pageToOffset (pageX, pageY, animate) {
+    const isFullscreen = document.mozFullScreenElement || document.fullscreenElement || document.webkitFullscreenElement
+    // The offset may be wrong if in fullscreen
+    const offsetTop = isFullscreen ? 0 : this.offsetTop
+    const offsetLeft = isFullscreen ? 0 : this.offsetLeft
     if (this.scrollAnimation) {
       this.scrollAnimation.stop()
       this.scrollAnimation = null
@@ -191,8 +245,8 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.viewFinder.x = pageX
     this.viewFinder.y = pageY
     // position the viewFinder box to the center of the click
-    let x = pageX - (this.viewFinder.offsetLeft + this.offsetLeft)
-    let y = pageY - (this.viewFinder.offsetTop + this.offsetTop)
+    let x = pageX - (this.viewFinder.offsetLeft + offsetLeft)
+    let y = pageY - (this.viewFinder.offsetTop + offsetTop)
     // Trigger the scroll event for the container which will update the offsetX and offsetY.
     let scrollLeft = ((x / this.viewFinder.scale) * this.scale) * this.zoom
     let scrollTop = ((y / this.viewFinder.scale) * this.scale) * this.zoom
@@ -211,6 +265,16 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     let y = (this.container.scrollTop * this.viewFinder.scale)
     this.offsetX = (x / this.viewFinder.scale)
     this.offsetY = (y / this.viewFinder.scale)
+  }
+
+  handleWindowResize (ev) {
+    const isFullscreen = document.mozFullScreenElement || document.fullscreenElement || document.webkitFullscreenElement
+    if (isFullscreen) {
+      this.fill = 'cover'
+    } else {
+      this.fill = this.getAttribute('fill')
+    }
+    this.render()
   }
 
   handleViewFinderMousedown (ev) {
@@ -265,6 +329,11 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     this.zoom = zoom
     // skip animating the scrollTo since the slab is also being zoomed
     this.scrollTo(x, y, false)
+  }
+
+  toggle () {
+    this.flags.isMinimized = !this.flags.isMinimized
+    this.slab.classList.toggle('is-minimized', this.flags.isMinimized)
   }
 
   // Reflect the prop with the attr

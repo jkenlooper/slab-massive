@@ -29,21 +29,84 @@
   transform-origin: 0 0;
   outline: 1px solid red;
 }
+
 .sm-Slab-slot.is-animating {
   transition: transform 500ms linear;
 }
 
 .sm-Slab-zoomControls {
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  top: 0;
+  left: 0;
+  border-bottom: 4px ridge rgba(255, 255, 255, 0.5);
+  height: calc(30px + 4px);
 }
 
-.sm-Slab-zoomIn,
-.sm-Slab-zoomOut {
+.sm-Slab.is-minimized .sm-Slab-zoomControls {
+  visibility: hidden;
+}
+
+.sm-Slab-zoomControls > * + * {
+  margin-left: 5px;
+}
+
+/* button
+ * Each button is attached to a border much like a tab with one side having
+ * rounded corners.
+ */
+.sm-Slab-button {
+  user-select: none;
   display: block;
-  margin: 10px;
-  width: 30px;
-  height: 30px;
-  text-align: center;
+  cursor: pointer;
+  margin-top: 5px;
+  outline: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-right: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 35% 35% 0 0;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0 0.4em 0.2em;
+  height: calc(30px - 5px);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2em;
+}
+
+.sm-Slab-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* button--toggle
+ * Always is shown and is attached to top.
+ */
+.sm-Slab-button--toggle {
+  margin-top: 0;
+  margin-bottom: 5px;
+  border-top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 0 0 35% 35%;
+}
+
+.sm-Slab.is-minimized .sm-Slab-button--toggle {
+  visibility: visible;
+  opacity: 0.5;
+}
+
+/* buttonText
+ * Toggle modifier flips the text vertically when minimized.
+ */
+.sm-Slab-buttonText {
+  display: inline-block;
+  transition: 300ms transform;
+}
+
+.sm-Slab-button--toggle .sm-Slab-buttonText {
+  transform: scaleY(-1);
+}
+
+.sm-Slab.is-minimized .sm-Slab-button--toggle .sm-Slab-buttonText {
+  transform: scaleY(1);
 }
