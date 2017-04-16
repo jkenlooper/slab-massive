@@ -7,29 +7,24 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="dist/webcomponents.min.js"></script>
+        <link rel="stylesheet" href="mosaic-base.css"></link>
+        <link rel="stylesheet" href="example.css"></link>
     </head>
     <body>
+
+      <div class="Container">
 
       <h1>
         Example usage of SlabMassive
       </h1>
-      <h2>
-        Attribute documentation
-      </h2>
-      <ul>
-        <li>
-      width and height of content (not scaled)
-        </li>
-        <li>
-      zoom: Amount to zoom. Anything over '1' will show partial content.
-        </li>
-        <li>
-      offset-[x,y]: when zoom, the offset of the content from the top left corner.
-        </li>
-        <li>
-          fill: cover or contain.
-        </li>
+      <p>Use the custom slab-massive element to wrap large content that will be
+      scaled down to fit.  The slab-massive elements scales down the content
+      into a scrollable area and adds a view finder to the top left.  The
+      controls in the view finder allow for zooming in and out, toggling
+      fullscreen, and minimizing the controls.
       </p>
+
+<hr>
 
       <h2>
         Example img within the slab-massive element.
@@ -42,11 +37,66 @@
         (5463x3642)
         </strong>
       </p>
-      <div style="width:600px; height: 400px;">
+      <pre>
+&lt;slab-massive
+    width="5463" height="3642"
+    zoom="2" fill="cover"
+    offset-x="0" offset-y="0"&gt;
+  &lt;img src="photo-1459206131122-b9abb445103a.jpg"
+    width="5463" height="3642"
+    alt="Photo by Sweet Ice Cream Photography"&gt;
+&lt;/slab-massive&gt;
+      </pre>
+      <div class="Example">
       <slab-massive width="5463" height="3642" zoom="2" fill="cover"
         offset-x="0" offset-y="0">
         <img src="photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
       </slab-massive>
+      </div>
+      <h2>
+        Attribute documentation
+      </h2>
+
+      <!-- Oops, thought mosaic had tables, oh well. -->
+      <table class="Table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Description</th>
+            <th>Works</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>width</td>
+          <td>Set to the width of the content.</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>height</td>
+          <td>Set to the height of the content.</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>zoom</td>
+          <td>Amount to zoom. Anything over '1' will show partial content.</td>
+          <td>Not well tested</td>
+        </tr>
+        <tr>
+          <td>offset-x</td>
+          <td>When zoomed, the X position of the viewfinder box.</td>
+          <td>Not tested. Set to 0.</td>
+        </tr>
+        <tr>
+          <td>offset-y</td>
+          <td>When zoomed, the Y position of the viewfinder box.</td>
+          <td>Not tested. Set to 0.</td>
+        </tr>
+        <tr>
+          <td>fill</td>
+          <td>Option to have content fill the entire width and height of the container.</td>
+          <td>Will probably deprecate.</td>
+        </tr>
+      </table>
       </div>
 
       <script src="dist/slab-massive.min.js"></script>

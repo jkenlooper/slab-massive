@@ -1,0 +1,29 @@
+.Table {
+  border: 1px solid currentcolor;
+  border-collapse: collapse;
+  width: 100%;
+}
+.Table th {
+  padding: 4px;
+}
+.Table td {
+  border: 1px solid currentcolor;
+  padding: 4px;
+}
+
+.Container {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.Example {
+  width: 600px;
+  height: 400px;
+}
+
+/* Allow the content to take the full width and height of the screen when it's
+ * in fullscreen. */
+.Example:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
