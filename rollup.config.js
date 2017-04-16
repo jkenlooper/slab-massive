@@ -16,8 +16,8 @@ import cssnano from 'cssnano'
 
 export default {
   entry: 'src/main.js',
-  format: 'es',
-  // moduleName: 'slab-massive',
+  format: 'iife',
+  moduleName: 'slab-massive',
   plugins: [
     json(),
     html({
