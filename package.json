@@ -1,6 +1,6 @@
 {
   "name": "slab-massive",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Web Component for displaying and navigating partial content",
   "repository": {
     "type": "git",
