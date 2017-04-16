@@ -21,13 +21,13 @@
       width and height of content (not scaled)
         </li>
         <li>
-      scale: To make the content all fit into the slab-massive scale it by this amount. Use '0' to auto scale it to within browser window.
-        </li>
-        <li>
       zoom: Amount to zoom. Anything over '1' will show partial content.
         </li>
         <li>
       offset-[x,y]: when zoom, the offset of the content from the top left corner.
+        </li>
+        <li>
+          fill: cover or contain.
         </li>
       </p>
 
@@ -42,21 +42,14 @@
         (5463x3642)
         </strong>
       </p>
-      <slab-massive width="5463" height="3642" scale="0.1" zoom="2"
-        offset-x="0" offset-y="0">
-        <img src="photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
-      </slab-massive>
-
-      <h3>contained</h3>
-      <div style="width:400px">
-      <slab-massive width="5463" height="3642" scale="0" zoom="2"
+      <div style="width:600px; height: 400px;">
+      <slab-massive width="5463" height="3642" zoom="2" fill="cover"
         offset-x="0" offset-y="0">
         <img src="photo-1459206131122-b9abb445103a.jpg" width="5463" height="3642" alt="Photo by Sweet Ice Cream Photography">
       </slab-massive>
       </div>
 
-      <script src="dist/hammer.min.js"></script>
-      <script src="dist/slab-massive.js"></script>
+      <script src="dist/slab-massive.min.js"></script>
 
     </body>
 </html>
