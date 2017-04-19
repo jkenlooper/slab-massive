@@ -34,7 +34,8 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-postcss": "^0.4.1",
     "rollup-pluginutils": "^2.0.1",
-    "standard": "^6.0.8"
+    "standard": "^6.0.8",
+    "webcomponents.js": "https://github.com/webcomponents/webcomponentsjs/archive/v1.0.0-rc.8.tar.gz"
   },
   "scripts": {
     "rollup": "rollup -c",
