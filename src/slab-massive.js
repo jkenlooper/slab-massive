@@ -2,7 +2,7 @@
 import ScrollAnimation from './scroll-animation.js'
 import fullscreen from './fullscreen.js'
 import debounce from './debounce.js'
-import style from './slab-massive.css'
+import style from './index.css'
 import template from './slab-massive.html'
 import { version, description, author, repository } from '../package.json'
 const html = `
