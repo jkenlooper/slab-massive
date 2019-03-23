@@ -1,24 +1,18 @@
-import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import json from 'rollup-plugin-json'
 import html from 'rollup-plugin-html'
+import commonjs from 'rollup-plugin-commonjs'
+import pkg from './package.json'
 
 // Modified rollup-plugin-postcss to store the css in a var
 import rollupPostcssInline from './src/rollup-postcss-inline.js'
 
 import postcssImport from 'postcss-import'
-import postcssCustomProperties from 'postcss-custom-properties'
 import postcssCustomMedia from 'postcss-custom-media'
-import postcssCalc from 'postcss-calc'
 import autoprefixer from 'autoprefixer'
-import postcssUrl from 'postcss-url'
 import cssnano from 'cssnano'
 
-export default {
-  entry: 'src/main.js',
-  format: 'iife',
-  moduleName: 'slab-massive',
-  plugins: [
+const plugins = [
     json(),
     html({
       include: 'src/**/*.html',
@@ -37,21 +31,39 @@ export default {
     rollupPostcssInline({
       plugins: [
         postcssImport(),
-        postcssCustomProperties(),
         postcssCustomMedia(),
-        postcssCalc(),
         autoprefixer(),
-        postcssUrl(),
         cssnano()
       ],
       sourceMap: false,
       extract: true,
       extensions: ['.css']
-    }),
-    resolve(),
-    babel({
-      exclude: 'node_modules/**' // only transpile our source code
     })
-  ],
-  dest: 'dist/slab-massive.min.js'
-}
+  ]
+
+export default [
+	// browser-friendly UMD build
+  {
+    input: 'src/main.js',
+    output: {
+      name: 'slab-massive',
+      file: pkg.browser,
+      format: 'umd'
+    },
+    plugins: plugins.concat([
+      resolve(),
+      commonjs()
+    ])
+  },
+
+	// CommonJS (for Node) and ES module (for bundlers) build.
+  {
+    input: 'src/main.js',
+    external: [],
+    output: [
+      { file: pkg.main, format: 'cjs' },
+      { file: pkg.module, format: 'es' }
+    ],
+    plugins: plugins
+  }
+]

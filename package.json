@@ -6,47 +6,41 @@
     "type": "git",
     "url": "https://github.com/jkenlooper/slab-massive"
   },
+  "main": "dist/slab-massive.cjs.js",
+  "module": "dist/slab-massive.esm.js",
+  "browser": "dist/slab-massive.umd.js",
+  "author": "Jake Hickenlooper",
+  "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
-    "autoprefixer": "^6.3.6",
-    "babel-cli": "^6.16.0",
-    "babel-core": "^6.24.1",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-babili": "0.0.12",
-    "babel-preset-env": "^1.4.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-latest": "^6.24.1",
-    "babili": "0.0.12",
-    "cssnano": "^3.5.2",
+    "autoprefixer": "^9.5.0",
+    "cssnano": "^4.1.10",
     "csssources": "0.0.1",
     "html-minifier": "^3.1.0",
-    "postcss": "^5.2.17",
-    "postcss-calc": "^5.2.1",
-    "postcss-cli": "^2.6.0",
-    "postcss-custom-media": "^5.0.1",
-    "postcss-custom-properties": "^5.0.0",
-    "postcss-import": "^8.1.0",
-    "postcss-reporter": "^1.3.3",
-    "postcss-url": "^5.1.1",
-    "rollup": "^0.41.6",
-    "rollup-plugin-babel": "^2.7.1",
+    "postcss": "^7.0.14",
+    "postcss-custom-media": "^7.0.7",
+    "postcss-import": "^12.0.1",
+    "postcss-reporter": "^6.0.1",
+    "rollup": "^1.0.0",
+    "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-html": "^0.2.1",
-    "rollup-plugin-json": "^2.1.1",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-postcss": "^0.4.1",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-postcss": "^2.0.3",
     "rollup-pluginutils": "^2.0.1",
-    "standard": "^6.0.8",
+    "standard": "^12.0.1",
     "webcomponents.js": "https://github.com/webcomponents/webcomponentsjs/archive/v1.0.0-rc.8.tar.gz"
   },
   "scripts": {
-    "rollup": "rollup -c",
+    "dev": "rollup -c -w",
     "pretest": "standard",
     "prebuild": "rm -rf dist; mkdir -p dist",
-    "build": "BABEL_ENV=production npm run rollup",
-    "postbuild": "git update-index --no-assume-unchanged `git ls-files dist/`",
-    "prepublish": "npm run build",
-    "preversion": "npm test && npm run build",
-    "version": "git add -f dist && git commit -m 'Add dist/ files' || echo 'No change to dist/ files'"
+    "build": "rollup -c"
   },
+  "files": [
+    "dist",
+    "src/slab-massive.css"
+  ],
   "standard": {
     "ignore": [
       "node_modules/*",
@@ -54,9 +48,5 @@
       "tests",
       "src/rollup-postcss-inline.js"
     ]
-  },
-  "main": "dist/slab-massive.min.js",
-  "author": "Jake Hickenlooper",
-  "license": "MIT",
-  "dependencies": {}
+  }
 }
