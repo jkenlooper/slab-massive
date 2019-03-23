@@ -18,7 +18,9 @@ ${template}
 const viewFinderMax = 150
 const maximumScale = 1
 
-window.customElements.define('slab-massive', class extends HTMLElement {
+const tag = 'slab-massive'
+
+window.customElements.define(tag, class SlabMassive extends HTMLElement {
   constructor () {
     super()
     const shadowRoot = this.attachShadow({mode: 'open'})
@@ -29,9 +31,9 @@ window.customElements.define('slab-massive', class extends HTMLElement {
     }
 
     this.slab = shadowRoot.getElementById('sm-slab')
-    this.container = shadowRoot.querySelector('.sm-Slab-container')
-    this._slot = shadowRoot.querySelector('.sm-Slab-slot')
-    this.slotWrapper = shadowRoot.querySelector('.sm-Slab-slotWrapper')
+    this.container = shadowRoot.getElementById('sm-container')
+    this._slot = shadowRoot.getElementById('sm-slot')
+    this.slotWrapper = shadowRoot.getElementById('sm-slotwrapper')
     this.viewFinder = shadowRoot.getElementById('sm-viewfinder')
     this.viewFinderBox = shadowRoot.getElementById('sm-viewfinderbox')
     this.viewFinder.x = (this.viewFinder.offsetLeft + this.offsetLeft)
