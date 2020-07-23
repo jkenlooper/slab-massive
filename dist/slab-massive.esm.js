@@ -78,11 +78,11 @@ function debounce (func, wait, immediate) {
   }
 }
 
-var style = ":host{display:block;contain:content}*{box-sizing:border-box}.sm-Slab{position:relative;overflow:hidden}.sm-Slab>*{position:absolute;z-index:2}.sm-Slab-container{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:relative;z-index:1;overflow:scroll}.sm-Slab-slotWrapper{overflow:hidden}.sm-Slab-slot{-webkit-transform-origin:0 0;transform-origin:0 0;outline:1px solid red}.sm-Slab-slot.is-animating{transition:-webkit-transform .5s linear;transition:transform .5s linear;transition:transform .5s linear,-webkit-transform .5s linear}.sm-Slab-zoomControls{display:flex;top:0;left:0;border-bottom:4px ridge hsla(0,0%,100%,.5);height:34px}.sm-Slab.is-minimized .sm-Slab-zoomControls{visibility:hidden}.sm-Slab-zoomControls>*+*{margin-left:5px}.sm-Slab-button{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:block;cursor:pointer;margin-top:5px;outline:0;border:1px solid hsla(0,0%,100%,.6);border-bottom:0;border-radius:35% 35% 0 0;background:rgba(0,0,0,.2);padding:0 .4em .2em;height:25px;color:hsla(0,0%,100%,.6);font-size:20px;font-weight:900;line-height:1.2em}.sm-Slab-button:disabled{opacity:.5;cursor:default}.sm-Slab-button--toggle{margin-top:0;margin-bottom:5px;border-top:0;border-bottom:1px solid hsla(0,0%,100%,.6);border-radius:0 0 35% 35%}.sm-Slab.is-minimized .sm-Slab-button--toggle{visibility:visible;opacity:.5}.sm-Slab-buttonText{display:inline-block;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}.sm-Slab-button--toggle .sm-Slab-buttonText{-webkit-transform:scaleY(-1);transform:scaleY(-1)}.sm-Slab.is-minimized .sm-Slab-button--toggle .sm-Slab-buttonText{-webkit-transform:scaleY(1);transform:scaleY(1)}.sm-ViewFinder{top:30px;left:0;cursor:crosshair}.sm-Slab.is-minimized .sm-ViewFinder{display:none}.sm-ViewFinder:after,.sm-ViewFinder:before{position:absolute;opacity:.5;width:20%;height:20%;content:\"\"}.sm-ViewFinder:before{top:0;left:0;border-left:4px ridge #fff}.sm-ViewFinder:after{right:0;bottom:0;border-right:4px ridge #fff;border-bottom:4px ridge #fff}.sm-ViewFinder-box{-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-transform-origin:0 0;transform-origin:0 0;opacity:.5;transition:-webkit-transform .3s linear;transition:transform .3s linear;transition:transform .3s linear,-webkit-transform .3s linear;cursor:crosshair;border:1px dashed #000;background-color:hsla(0,0%,100%,.4);width:30px;height:30px}";
+var style = ":host{display:block;contain:content}*{box-sizing:border-box}.sm-Slab{position:relative;overflow:hidden}.sm-Slab>*{position:absolute;z-index:2}.sm-Slab-container{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:relative;z-index:1;overflow:scroll}.sm-Slab-slotWrapper{overflow:hidden}.sm-Slab-slot{transform-origin:0 0;outline:1px solid red}.sm-Slab-slot.is-animating{transition:transform .5s linear}.sm-Slab-zoomControls{display:flex;top:0;left:0;border-bottom:4px ridge hsla(0,0%,100%,.5);height:34px}.sm-Slab.is-minimized .sm-Slab-zoomControls{visibility:hidden}.sm-Slab-zoomControls>*+*{margin-left:5px}.sm-Slab-button{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:block;cursor:pointer;margin-top:5px;outline:0;border:1px solid hsla(0,0%,100%,.6);border-bottom:0;border-radius:35% 35% 0 0;background:rgba(0,0,0,.2);padding:0 .4em .2em;height:25px;color:hsla(0,0%,100%,.6);font-size:20px;font-weight:900;line-height:1.2em}.sm-Slab-button:disabled{opacity:.5;cursor:default}.sm-Slab-button--toggle{margin-top:0;margin-bottom:5px;border-top:0;border-bottom:1px solid hsla(0,0%,100%,.6);border-radius:0 0 35% 35%}.sm-Slab.is-minimized .sm-Slab-button--toggle{visibility:visible;opacity:.5}.sm-Slab-buttonText{display:inline-block;transition:transform .3s}.sm-Slab-button--toggle .sm-Slab-buttonText{transform:scaleY(-1)}.sm-Slab.is-minimized .sm-Slab-button--toggle .sm-Slab-buttonText{transform:scaleY(1)}.sm-ViewFinder{top:30px;left:0;cursor:crosshair}.sm-Slab.is-minimized .sm-ViewFinder{display:none}.sm-ViewFinder:after,.sm-ViewFinder:before{position:absolute;opacity:.5;width:20%;height:20%;content:\"\"}.sm-ViewFinder:before{top:0;left:0;border-left:4px ridge #fff}.sm-ViewFinder:after{right:0;bottom:0;border-right:4px ridge #fff;border-bottom:4px ridge #fff}.sm-ViewFinder-box{transform:translateZ(0);transform-origin:0 0;opacity:.5;transition:transform .3s linear;cursor:crosshair;border:1px dashed #000;background-color:hsla(0,0%,100%,.4);width:30px;height:30px}";
 
 var template = "<div id=sm-slab class=sm-Slab> <div id=sm-viewfinder class=sm-ViewFinder> <slot id=view-finder name=view-finder> </slot> <div id=sm-viewfinderbox class=sm-ViewFinder-box></div> </div> <div id=sm-container class=sm-Slab-container unselectable=on onselectstart=return!1 onmousedown=return!1> <div id=sm-slotwrapper class=sm-Slab-slotWrapper> <div id=sm-slot class=sm-Slab-slot> <slot> </slot> </div> </div> </div> <div class=sm-Slab-zoomControls> <button id=sm-zoomin-button class=sm-Slab-button> <span class=sm-Slab-buttonText> + </span> </button> <button id=sm-zoomout-button class=sm-Slab-button> <span class=sm-Slab-buttonText> - </span> </button> <button id=sm-fullscreen-button class=sm-Slab-button> <span class=sm-Slab-buttonText> &harr; </span> </button> <button id=sm-toggle-button class=\"sm-Slab-button sm-Slab-button--toggle\"> <span class=sm-Slab-buttonText> &#9650; </span> </button> </div> </div> ";
 
-var version = "0.3.1";
+var version = "0.4.0";
 var description = "Web Component for displaying and navigating partial content";
 var repository = {
 	type: "git",
@@ -134,8 +134,6 @@ window.customElements.define(tag, class SlabMassive extends HTMLElement {
     this.toggleEl = shadowRoot.getElementById('sm-toggle-button');
     this.toggleEl.addEventListener('click', this.toggle.bind(this));
 
-    this.render();
-
     let handleScroll = this.handleScroll.bind(this);
     this.container.addEventListener('scroll', handleScroll);
 
@@ -143,7 +141,7 @@ window.customElements.define(tag, class SlabMassive extends HTMLElement {
 
     this.fullscreenButton = shadowRoot.getElementById('sm-fullscreen-button');
     let wrapper = this.parentElement;
-    fullscreen(this.fullscreenButton, wrapper, this);
+    fullscreen(this.fullscreenButton, wrapper);
 
     window.addEventListener('deviceorientation', this.handleWindowResize.bind(this));
     let handleWindowResizeDebounced = debounce(this.handleWindowResize, 100, false).bind(this);
@@ -151,7 +149,9 @@ window.customElements.define(tag, class SlabMassive extends HTMLElement {
   }
 
   // Fires when an instance was inserted into the document.
-  connectedCallback () {}
+  connectedCallback () {
+    this.render();
+  }
 
   static get observedAttributes () {
     return [
