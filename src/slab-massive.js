@@ -48,8 +48,6 @@ window.customElements.define(tag, class SlabMassive extends HTMLElement {
     this.toggleEl = shadowRoot.getElementById('sm-toggle-button')
     this.toggleEl.addEventListener('click', this.toggle.bind(this))
 
-    this.render()
-
     let handleScroll = this.handleScroll.bind(this)
     this.container.addEventListener('scroll', handleScroll)
 
@@ -65,7 +63,9 @@ window.customElements.define(tag, class SlabMassive extends HTMLElement {
   }
 
   // Fires when an instance was inserted into the document.
-  connectedCallback () {}
+  connectedCallback () {
+    this.render()
+  }
 
   static get observedAttributes () {
     return [

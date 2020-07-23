@@ -13,40 +13,29 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "autoprefixer": "^9.5.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-json": "^4.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "autoprefixer": "^9.8.5",
     "cssnano": "^4.1.10",
-    "csssources": "0.0.1",
     "html-minifier": "^3.1.0",
-    "postcss": "^7.0.14",
-    "postcss-custom-media": "^7.0.7",
+    "postcss": "^7.0.32",
+    "postcss-custom-media": "^7.0.8",
     "postcss-import": "^12.0.1",
-    "postcss-reporter": "^6.0.1",
-    "rollup": "^1.0.0",
-    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup": "^2.22.2",
     "rollup-plugin-html": "^0.2.1",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-postcss": "^2.0.3",
-    "rollup-pluginutils": "^2.0.1",
-    "standard": "^12.0.1",
-    "webcomponents.js": "https://github.com/webcomponents/webcomponentsjs/archive/v1.0.0-rc.8.tar.gz"
+    "rollup-plugin-postcss": "^3.1.3",
+    "rollup-plugin-terser": "^5.0.0",
+    "rollup-pluginutils": "^2.8.2",
+    "@webcomponents/webcomponentsjs": "^2.4.1"
   },
   "scripts": {
     "dev": "rollup -c -w",
-    "pretest": "standard",
     "prebuild": "rm -rf dist; mkdir -p dist",
     "build": "rollup -c"
   },
   "files": [
     "dist",
     "src/slab-massive.css"
-  ],
-  "standard": {
-    "ignore": [
-      "node_modules/*",
-      "dist",
-      "tests",
-      "src/rollup-postcss-inline.js"
-    ]
-  }
+  ]
 }

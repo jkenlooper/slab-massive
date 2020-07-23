@@ -1,7 +1,7 @@
-import resolve from 'rollup-plugin-node-resolve'
-import json from 'rollup-plugin-json'
+import nodeResolve from "@rollup/plugin-node-resolve";
+import json from '@rollup/plugin-json'
 import html from 'rollup-plugin-html'
-import commonjs from 'rollup-plugin-commonjs'
+import commonjs from "@rollup/plugin-commonjs";
 import pkg from './package.json'
 
 // Modified rollup-plugin-postcss to store the css in a var
@@ -51,7 +51,7 @@ export default [
       format: 'umd'
     },
     plugins: plugins.concat([
-      resolve(),
+      nodeResolve(),
       commonjs()
     ])
   },
