@@ -1,4 +1,3 @@
 # slab-massive
-experimental web component
 
-... wip ...
+Moved to <https://git.sr.ht/~jkenlooper/slab-massive>
